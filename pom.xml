@@ -28,5 +28,4 @@
         * If you contribute to a build, you favorite it automatically.
     * User configuration screen to show favorites, and auto favorite enabled.
     * user's config.xml has <string> around each job name. Be nice to switch to <job>
-    * Anonymous is disallowed from saving favorites in java code, but would be nice to not show this for them.
 -->

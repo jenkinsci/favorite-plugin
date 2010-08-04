@@ -16,7 +16,7 @@ public class FavoritePlugin extends Plugin {
         Authentication authentication = Hudson.getAuthentication();
         String name = authentication.getName();
         System.out.println("NAME: " + name);
-        if (!name.equals("anonymous")) {
+        if (authentication.isAuthenticated()) {
             User user = Hudson.getInstance().getUser(name);
             FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
             try {

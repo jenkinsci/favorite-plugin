@@ -24,12 +24,15 @@ public class FavoriteFilter extends ViewJobFilter {
         List<TopLevelItem> filtered = new ArrayList<TopLevelItem>(added);
 
         Authentication authentication = Hudson.getAuthentication();
+
         String name = authentication.getName();
-        User user = Hudson.getInstance().getUser(name);
-        FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
-        for (TopLevelItem item : all) {
-            if (!fup.isJobFavorite(item.getName())) {
-                filtered.remove(item);
+        if (authentication.isAuthenticated()) {
+            User user = Hudson.getInstance().getUser(name);
+            FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
+            for (TopLevelItem item : all) {
+                if (!fup.isJobFavorite(item.getName())) {
+                    filtered.remove(item);
+                }
             }
         }
         return filtered;

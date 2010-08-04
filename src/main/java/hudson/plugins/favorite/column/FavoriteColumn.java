@@ -49,4 +49,9 @@ public class FavoriteColumn extends ListViewColumn {
             return "star-gold.gif";
         }
     }
+
+    public boolean isLoggedIn() {
+        Authentication authentication = Hudson.getAuthentication();
+        return authentication.isAuthenticated();
+    }
 }
