@@ -30,10 +30,10 @@ public class FavoriteFilter extends ViewJobFilter {
             User user = Hudson.getInstance().getUser(name);
             FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
             for (TopLevelItem item : all) {
-                if (!fup.isJobFavorite(item.getName())) {
-                    filtered.remove(item);
-                }
-            }
+               if (fup == null || !fup.isJobFavorite(item.getName())) {
+                   filtered.remove(item);
+               }
+           }
         }
         return filtered;
     }

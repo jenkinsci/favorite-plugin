@@ -15,13 +15,13 @@ public class FavoritePlugin extends Plugin {
     public void doToggleFavorite(StaplerRequest req, StaplerResponse resp, @QueryParameter String job) {
         Authentication authentication = Hudson.getAuthentication();
         String name = authentication.getName();
-        System.out.println("NAME: " + name);
-        if (authentication.isAuthenticated()) {
+        if (!authentication.getName().equals("anonymous")) {
             User user = Hudson.getInstance().getUser(name);
             FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
             try {
                 if (fup == null) {
                     user.addProperty(new FavoriteUserProperty());
+                    fup = user.getProperty(FavoriteUserProperty.class);
                 }
                 fup.toggleFavorite(job);
                 user.save();
