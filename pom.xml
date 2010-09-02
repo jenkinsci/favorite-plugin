@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.jvnet.hudson.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>1.369</version>
+        <version>1.374</version>
     </parent>
     <developers>
         <developer>
@@ -25,6 +25,7 @@
     * Add "star" to job page
     * Add "Auto Favorite" feature
         * If you contribute to a build, you favorite it automatically.
-    * User configuration screen to show favorites, and auto favorite enabled.
     * user's config.xml has <string> around each job name. Be nice to switch to <job>
+    * Clean up code duplication (javascript for toggle favorite)
+    * Clean up look and feel of user config page.
 -->
