@@ -26,6 +26,5 @@
     * Add "Auto Favorite" feature
         * If you contribute to a build, you favorite it automatically.
     * user's config.xml has <string> around each job name. Be nice to switch to <job>
-    * Clean up code duplication (javascript for toggle favorite)
     * Clean up look and feel of user config page.
 -->
