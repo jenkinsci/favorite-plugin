@@ -50,6 +50,11 @@ public class FavoriteColumn extends ListViewColumn {
         }
     }
 
+    public String getUserId() {
+        Authentication authentication = Hudson.getAuthentication();
+        return authentication.getName();
+    }
+
     public boolean isLoggedIn() {
         Authentication authentication = Hudson.getAuthentication();
         if (authentication.getName().equals("anonymous")) {
