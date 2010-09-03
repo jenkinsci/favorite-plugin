@@ -1,7 +1,6 @@
 package hudson.plugins.favorite.user;
 
 import hudson.Extension;
-import hudson.model.User;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 @ExportedBean(defaultVisibility = 999)
 public class FavoriteUserProperty extends UserProperty {
     @Extension
-    public static final UserPropertyDescriptor DESCRIPTOR = new DescriptorImpl();
+    public static final UserPropertyDescriptor DESCRIPTOR = new FavoriteUserPropertyDescriptor();
 
     @DataBoundConstructor
     public FavoriteUserProperty() {
@@ -51,23 +50,6 @@ public class FavoriteUserProperty extends UserProperty {
     @Override
     public UserPropertyDescriptor getDescriptor() {
         return DESCRIPTOR;
-    }
-
-    private static class DescriptorImpl extends UserPropertyDescriptor {
-
-        public DescriptorImpl() {
-            super(FavoriteUserProperty.class);
-        }
-
-        @Override
-        public UserProperty newInstance(User user) {
-            return new FavoriteUserProperty();
-        }
-
-        @Override
-        public String getDisplayName() {
-            return "Favorites";
-        }
     }
 
 }
