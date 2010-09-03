@@ -1,9 +1,8 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <f:block>
     <script type="text/javascript" src="${rootURL}/plugin/favorite/favoriteToggle.js"></script>
-    <!-- TODO if an admin looks at others, either update toggle to be aware of for which user or don't display it-->
     <j:forEach var="favorite" items="${instance.favorites}">
-      <a onclick="return toggleFavorite('${favorite}', this)" href="#">
+      <a onclick="return toggleFavorite('${favorite}', '${it.id}', this)" href="#">
         <img src="${imagesURL}/16x16/star-gold.gif" border="0" id="fav_${favorite}"/>
       </a>
       <st:nbsp/>
