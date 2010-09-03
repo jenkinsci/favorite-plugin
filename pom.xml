@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>favorite</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <packaging>hpi</packaging>
     <name>Favorite</name>
     <url>http://wiki.hudson-ci.org/display/HUDSON/Favorite+Plugin</url>
@@ -19,6 +19,12 @@
         <email>larrys@gmail.com</email>
         </developer>
     </developers>
+
+  <scm>
+    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/favorite-1.2</connection>
+    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/favorite-1.2</developerConnection>
+    <url>https://hudson.dev.java.net/source/browse/hudson/tags/favorite-1.2</url>
+  </scm>
 </project>
 <!--
    TODOs:
