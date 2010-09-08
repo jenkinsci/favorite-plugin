@@ -1,5 +1,5 @@
 function toggleFavorite(job, user, a) {
-  new Ajax.Request('/plugin/favorite/toggleFavorite?job=' + job + "&userName=" + user);
+  new Ajax.Request(rootURL+'/plugin/favorite/toggleFavorite?job=' + job + "&userName=" + user);
   image = document.getElementById("fav_" + job);
   if(image.src.match(/star.gif$/)) {
     image.src = image.src.replace("star.gif", "star-gold.gif");
