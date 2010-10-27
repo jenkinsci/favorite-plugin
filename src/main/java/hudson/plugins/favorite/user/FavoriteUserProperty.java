@@ -1,13 +1,18 @@
 package hudson.plugins.favorite.user;
 
 import hudson.Extension;
+import hudson.model.Descriptor;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
+import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.ExportedBean;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @ExportedBean(defaultVisibility = 999)
 public class FavoriteUserProperty extends UserProperty {
@@ -19,9 +24,9 @@ public class FavoriteUserProperty extends UserProperty {
         this.getDescriptor();
     }
 
-    private ArrayList<String> favorites = new ArrayList<String>();
+    private List<String> favorites = Collections.synchronizedList(new ArrayList<String>());
 
-    public ArrayList<String> getFavorites() {
+    public List<String> getFavorites() {
         return favorites;
     }
 
@@ -41,6 +46,11 @@ public class FavoriteUserProperty extends UserProperty {
         } else {
             addFavorite(job);
         }
+    }
+
+    @Override
+    public UserProperty reconfigure(StaplerRequest req, JSONObject form) throws Descriptor.FormException {
+        return this;
     }
 
     public boolean isJobFavorite(String job) {
