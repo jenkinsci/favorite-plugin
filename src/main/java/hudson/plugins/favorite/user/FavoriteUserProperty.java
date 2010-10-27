@@ -24,7 +24,7 @@ public class FavoriteUserProperty extends UserProperty {
         this.getDescriptor();
     }
 
-    private List<String> favorites = Collections.synchronizedList(new ArrayList<String>());
+    private List<String> favorites = new ArrayList<String>();
 
     public List<String> getFavorites() {
         return favorites;
