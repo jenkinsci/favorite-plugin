@@ -3,6 +3,7 @@ package hudson.plugins.favorite.filter;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.views.ViewJobFilter;
+import hudson.plugins.favorite.Messages;
 
 @Extension
 public class FavoriteFilterDescriptor extends Descriptor<ViewJobFilter> {
@@ -12,6 +13,6 @@ public class FavoriteFilterDescriptor extends Descriptor<ViewJobFilter> {
 
     @Override
     public String getDisplayName() {
-        return "Favorites Filter";
+        return Messages.favoritesFilter();
     }
 }

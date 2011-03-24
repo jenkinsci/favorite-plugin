@@ -10,6 +10,7 @@ import net.sf.json.JSONObject;
 import org.acegisecurity.Authentication;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
+import hudson.plugins.favorite.Messages;
 
 public class FavoriteColumn extends ListViewColumn {
 
@@ -34,7 +35,7 @@ public class FavoriteColumn extends ListViewColumn {
         }
 
         public String getDisplayName() {
-            return "Favorite";
+            return Messages.favoriteColumn();
         }
     }
 

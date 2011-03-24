@@ -6,6 +6,7 @@ import hudson.model.User;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
 import org.kohsuke.stapler.QueryParameter;
+import hudson.plugins.favorite.Messages;
 
 public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
 
@@ -20,7 +21,7 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
 
     @Override
     public String getDisplayName() {
-        return "Favorites";
+        return Messages.favoriteUserPropertyDescriptor();
     }
 
     public AutoCompletionCandidates doAutoCompleteJob(@QueryParameter String value) {

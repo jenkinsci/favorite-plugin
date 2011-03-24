@@ -1,6 +1,6 @@
 <j:jelly xmlns:j="jelly:core">
     <j:if test="${it.isLoggedIn()}">
-        <th>Fav</th>
+        <th>${%Fav}</th>
         <script type="text/javascript" src="${rootURL}/plugin/favorite/favoriteToggle.js"></script>
     </j:if>
 </j:jelly>
