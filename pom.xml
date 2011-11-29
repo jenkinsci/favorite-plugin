@@ -6,11 +6,16 @@
     <version>1.6-SNAPSHOT</version>
     <packaging>hpi</packaging>
     <name>Favorite</name>
-    <url>http://wiki.hudson-ci.org/display/HUDSON/Favorite+Plugin</url>
+    <url>http://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin</url>
+    <scm>
+        <connection>scm:git:https://github.com/jenkinsci/favorite-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/jenkinsci/favorite-plugin.git</developerConnection>
+        <url>https://github.com/jenkinsci/favorite-plugin</url>
+    </scm>
     <parent>
-        <groupId>org.jvnet.hudson.plugins</groupId>
+        <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>1.374</version>
+        <version>1.400</version>
     </parent>
     <developers>
         <developer>
@@ -22,9 +27,7 @@
 </project>
 <!--
    TODOs:
-    * Add "star" to job page
     * Add "Auto Favorite" feature
-        * If you contribute to a build, you favorite it automatically.
-    * user's config.xml has <string> around each job name. Be nice to switch to <job>
+      * If you contribute to a build, you favorite it automatically.
     * Clean up look and feel of user config page.
 -->

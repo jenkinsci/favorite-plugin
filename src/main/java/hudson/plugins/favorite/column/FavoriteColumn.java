@@ -4,13 +4,13 @@ import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.model.User;
+import hudson.plugins.favorite.Messages;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import hudson.views.ListViewColumn;
 import net.sf.json.JSONObject;
 import org.acegisecurity.Authentication;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
-import hudson.plugins.favorite.Messages;
 
 public class FavoriteColumn extends ListViewColumn {
 
@@ -29,8 +29,7 @@ public class FavoriteColumn extends ListViewColumn {
 
     private static class DescriptorImpl extends Descriptor<ListViewColumn> {
         @Override
-        public ListViewColumn newInstance(StaplerRequest req,
-                                          JSONObject formData) throws FormException {
+        public ListViewColumn newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             return new FavoriteColumn();
         }
 

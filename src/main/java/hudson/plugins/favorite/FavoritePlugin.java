@@ -12,7 +12,7 @@ import org.kohsuke.stapler.StaplerResponse;
 import java.io.IOException;
 
 public class FavoritePlugin extends Plugin {
-    public void doToggleFavorite(StaplerRequest req, StaplerResponse resp, @QueryParameter String job, @QueryParameter String userName) {
+    public void doToggleFavorite(StaplerRequest req, StaplerResponse resp, @QueryParameter String job, @QueryParameter String userName, @QueryParameter Boolean redirect) throws IOException {
         if ("".equals(userName) || userName == null) {
             Authentication authentication = Hudson.getAuthentication();
             userName = authentication.getName();
@@ -27,10 +27,12 @@ public class FavoritePlugin extends Plugin {
                 }
                 fup.toggleFavorite(job);
                 user.save();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        if(redirect) {
+            resp.sendRedirect(resp.encodeRedirectURL("/job/" + job));
         }
     }
 }
