@@ -27,7 +27,7 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
     public AutoCompletionCandidates doAutoCompleteJob(@QueryParameter String value) {
         AutoCompletionCandidates c = new AutoCompletionCandidates();
         for (String job : Hudson.getInstance().getJobNames()) {
-            if (job.toLowerCase().startsWith(job.toLowerCase())) {
+            if (job.toLowerCase().startsWith(value.toLowerCase())) {
                 c.add(job);
             }
         }
