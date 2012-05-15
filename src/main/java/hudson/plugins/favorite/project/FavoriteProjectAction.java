@@ -1,5 +1,8 @@
 package hudson.plugins.favorite.project;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.Hudson;
@@ -39,7 +42,12 @@ public class FavoriteProjectAction implements Action {
 
     public String getUrlName() {
         if (hasPermission()) {
-            return "/plugin/favorite/toggleFavorite?job=" + getProjectName() + "&userName=" + getUserName() + "&redirect=true";
+            try {
+				return "/plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(),"UTF-8") + "&userName=" + URLEncoder.encode(getUserName(),"UTF-8") + "&redirect=true";
+			} catch (UnsupportedEncodingException e) {
+				
+	            return null;
+			}
         } else {
             return null;
         }
