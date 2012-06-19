@@ -28,7 +28,9 @@ public class FavoriteFilter extends ViewJobFilter {
         String name = authentication.getName();
         if (name != null && authentication.isAuthenticated()) {
             User user = Hudson.getInstance().getUser(name);
-            if (user != null) {
+            if (user == null) {
+                clearView(all, filtered);
+            } else {
                 FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
                 for (TopLevelItem item : all) {
                     if (fup == null || !fup.isJobFavorite(item.getName())) {
@@ -36,8 +38,16 @@ public class FavoriteFilter extends ViewJobFilter {
                     }
                 }
             }
+        } else {
+            clearView(all, filtered);
         }
         return filtered;
+    }
+
+    private void clearView(List<TopLevelItem> all, List<TopLevelItem> filtered) {
+        for (TopLevelItem item : all) {
+            filtered.remove(item);
+        }
     }
 
 }
