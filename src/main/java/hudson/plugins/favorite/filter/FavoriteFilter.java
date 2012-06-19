@@ -26,14 +26,16 @@ public class FavoriteFilter extends ViewJobFilter {
         Authentication authentication = Hudson.getAuthentication();
 
         String name = authentication.getName();
-        if (authentication.isAuthenticated()) {
+        if (name != null && authentication.isAuthenticated()) {
             User user = Hudson.getInstance().getUser(name);
-            FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
-            for (TopLevelItem item : all) {
-               if (fup == null || !fup.isJobFavorite(item.getName())) {
-                   filtered.remove(item);
-               }
-           }
+            if (user != null) {
+                FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
+                for (TopLevelItem item : all) {
+                    if (fup == null || !fup.isJobFavorite(item.getName())) {
+                        filtered.remove(item);
+                    }
+                }
+            }
         }
         return filtered;
     }
