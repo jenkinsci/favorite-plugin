@@ -1,8 +1,9 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:s="/lib/form">
   <j:if test="${it.isLoggedIn()}">
-    <td>
-      <j:set var="star" value="${it.getStar(job.name)}"/>
+    <j:set var="sortData" value="${it.getSortData(job.name)}"/>
+    <j:set var="star" value="${it.getStar(job.name)}"/>
+    <td data="${sortData}">
       <a onclick="return toggleFavorite('${job.name}', '${id.userId}', this)" href="#">
         <img src="${imagesURL}/${subIconSize}/${star}" border="0" id="fav_${job.name}"/>
       </a>

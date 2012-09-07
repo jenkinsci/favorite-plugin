@@ -39,15 +39,29 @@ public class FavoriteColumn extends ListViewColumn {
     }
 
     public String getStar(String job) {
-        Authentication authentication = Hudson.getAuthentication();
-        String name = authentication.getName();
-        User user = Hudson.getInstance().getUser(name);
-        FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
+        FavoriteUserProperty fup = getFavoriteUserProperty();
         if (fup == null || !fup.isJobFavorite(job)) {
             return "star.gif";
         } else {
             return "star-gold.gif";
         }
+    }
+
+    private FavoriteUserProperty getFavoriteUserProperty() {
+        Authentication authentication = Hudson.getAuthentication();
+        String name = authentication.getName();
+        User user = Hudson.getInstance().getUser(name);
+        return user.getProperty(FavoriteUserProperty.class);
+    }
+
+    public int getSortData(String job) {
+        FavoriteUserProperty fup = getFavoriteUserProperty();
+        if (fup == null || !fup.isJobFavorite(job)) {
+            return 0;
+        } else {
+            return 1;
+        }
+
     }
 
     public String getUserId() {
