@@ -32,7 +32,7 @@ public class FavoritePlugin extends Plugin {
             }
         }
         if(redirect) {
-            resp.sendRedirect(resp.encodeRedirectURL("/job/" + job));
+            resp.sendRedirect(resp.encodeRedirectURL(Hudson.getInstance().getRootUrl() + "job/" + job));
         }
     }
 }
