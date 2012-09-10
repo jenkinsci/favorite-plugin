@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>favorite</artifactId>
-    <version>1.11-SNAPSHOT</version>
+    <version>1.11</version>
     <packaging>hpi</packaging>
     <name>Favorite</name>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin</url>
