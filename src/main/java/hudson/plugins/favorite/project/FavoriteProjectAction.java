@@ -9,6 +9,7 @@ import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.favorite.Messages;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
+import jenkins.model.Jenkins;
 import org.acegisecurity.Authentication;
 
 public class FavoriteProjectAction implements Action {
@@ -43,7 +44,7 @@ public class FavoriteProjectAction implements Action {
     public String getUrlName() {
         if (hasPermission()) {
             try {
-				return "/plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(),"UTF-8") + "&userName=" + URLEncoder.encode(getUserName(),"UTF-8") + "&redirect=true";
+				return Hudson.getInstance().getRootUrl() + "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(),"UTF-8") + "&userName=" + URLEncoder.encode(getUserName(),"UTF-8") + "&redirect=true";
 			} catch (UnsupportedEncodingException e) {
 				
 	            return null;
