@@ -32,7 +32,34 @@ public class FavoritePlugin extends Plugin {
             }
         }
         if(redirect) {
-            resp.sendRedirect(resp.encodeRedirectURL(Hudson.getInstance().getRootUrl() + "job/" + job));
+            if (!job.contains("/"))
+            {
+              resp.sendRedirect(resp.encodeRedirectURL(Hudson.getInstance().getRootUrl() + "job/" + job));
+            }
+            else
+            {
+              // The fullName is always using the pattern 'job/subJob', but Jenkins is not always using the 
+              // same URL pattern. Folders are internally stored as child jobs and therefore using a '/job/'
+              // between each name in the URL while matrix childs are directly appended. Therefore this 
+              // approach is working for standard jobs, folder hierachies and matrix parent jobs, but not for
+              // matrix child jobs.
+              // TODO think about alternatives to support or to disable favorites for matrix childs
+              // -->> getItemByFullName
+              // default: rootUrl/job/jobName
+              // folders: rootUrl/job/folder/job/subfolder/job/jobName
+              // matrix : rootUrl/job/jobName/subJobName
+              String[] folderHierarchy = job.split("/");
+              StringBuilder urlPostfix = new StringBuilder("job/");
+              for (int i = 0; i < folderHierarchy.length; i++)
+              {
+                urlPostfix.append(folderHierarchy[i]);
+                if (i < folderHierarchy.length - 1)
+                {
+                  urlPostfix.append("/job/");
+                }
+              }
+              resp.sendRedirect(resp.encodeRedirectURL(Hudson.getInstance().getRootUrl() + urlPostfix.toString()));
+            }
         }
     }
 }

@@ -11,7 +11,6 @@ import org.kohsuke.stapler.export.ExportedBean;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @ExportedBean(defaultVisibility = 999)

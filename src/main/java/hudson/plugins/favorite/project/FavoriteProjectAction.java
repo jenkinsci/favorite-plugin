@@ -20,7 +20,7 @@ public class FavoriteProjectAction implements Action {
     }
 
     public String getProjectName() {
-        return project.getName();
+        return project.getFullName();
     }
 
     public String getIconFileName() {
@@ -75,7 +75,7 @@ public class FavoriteProjectAction implements Action {
         if (!userName.equals("anonymous")) {
             User user = Hudson.getInstance().getUser(userName);
             FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
-            return fup.isJobFavorite(project.getName());
+            return fup.isJobFavorite(project.getFullName());
         } else {
             return false;
         }

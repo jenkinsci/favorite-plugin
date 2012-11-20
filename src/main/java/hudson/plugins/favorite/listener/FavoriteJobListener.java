@@ -39,8 +39,8 @@ public class FavoriteJobListener extends ItemListener {
         FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
         try {
           if (fup != null) {
-            if (fup.isJobFavorite(item.getName())) {
-              fup.removeFavorite(item.getName());
+            if (fup.isJobFavorite(item.getFullName())) {
+              fup.removeFavorite(item.getFullName());
               user.save();
             }
           }
