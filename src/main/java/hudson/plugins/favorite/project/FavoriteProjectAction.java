@@ -26,9 +26,9 @@ public class FavoriteProjectAction implements Action {
     public String getIconFileName() {
         if (hasPermission()) {
             if (isFavorite()) {
-                return "star-gold.gif";
+                return "star-gold.png";
             } else {
-                return "star.gif";
+                return "star.png";
             }
         }
         return null;
