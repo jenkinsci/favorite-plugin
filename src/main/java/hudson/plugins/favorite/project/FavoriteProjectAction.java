@@ -1,5 +1,6 @@
 package hudson.plugins.favorite.project;
 
+import hudson.matrix.MatrixConfiguration;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -9,7 +10,6 @@ import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.favorite.Messages;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
-import jenkins.model.Jenkins;
 import org.acegisecurity.Authentication;
 
 public class FavoriteProjectAction implements Action {
@@ -24,7 +24,7 @@ public class FavoriteProjectAction implements Action {
     }
 
     public String getIconFileName() {
-        if (hasPermission()) {
+        if (hasPermission() && isSupportedJobType()) {
             if (isFavorite()) {
                 return "star-gold.png";
             } else {
@@ -35,14 +35,14 @@ public class FavoriteProjectAction implements Action {
     }
 
     public String getDisplayName() {
-        if (hasPermission()) {
+        if (hasPermission() && isSupportedJobType()) {
             return Messages.favoriteColumn();
         }
         return null;
     }
 
     public String getUrlName() {
-        if (hasPermission()) {
+        if (hasPermission() && isSupportedJobType()) {
             try {
 				return Hudson.getInstance().getRootUrl() + "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(),"UTF-8") + "&userName=" + URLEncoder.encode(getUserName(),"UTF-8") + "&redirect=true";
 			} catch (UnsupportedEncodingException e) {
@@ -62,6 +62,17 @@ public class FavoriteProjectAction implements Action {
         } else {
             return false;
         }
+    }
+    
+    private boolean isSupportedJobType() {
+      // MatrixProjects are supported, but the underlying MatrixConfigurations
+      // cannot be referenced like other items because they are using the same
+      // pattern like folders
+      if (project instanceof MatrixConfiguration) {
+        return false;
+      } else {
+        return true;
+      }
     }
 
     private String getUserName() {
