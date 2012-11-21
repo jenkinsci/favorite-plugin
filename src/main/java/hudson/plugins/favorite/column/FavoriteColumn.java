@@ -41,9 +41,9 @@ public class FavoriteColumn extends ListViewColumn {
     public String getStar(String job) {
         FavoriteUserProperty fup = getFavoriteUserProperty();
         if (fup == null || !fup.isJobFavorite(job)) {
-            return "star.gif";
+            return "star.png";
         } else {
-            return "star-gold.gif";
+            return "star-gold.png";
         }
     }
 
