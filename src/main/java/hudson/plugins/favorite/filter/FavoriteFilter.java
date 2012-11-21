@@ -33,7 +33,7 @@ public class FavoriteFilter extends ViewJobFilter {
             } else {
                 FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
                 for (TopLevelItem item : all) {
-                    if (fup == null || !fup.isJobFavorite(item.getName())) {
+                    if (fup == null || !fup.isJobFavorite(item.getFullName())) {
                         filtered.remove(item);
                     }
                 }

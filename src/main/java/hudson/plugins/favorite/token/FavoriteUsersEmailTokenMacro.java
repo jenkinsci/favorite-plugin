@@ -24,7 +24,7 @@ public class FavoriteUsersEmailTokenMacro extends DataBoundTokenMacro {
         AbstractProject project = context.getProject();
         for (User user : User.getAll()) {
             FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
-            if (fup != null && fup.isJobFavorite(project.getName())) {
+            if (fup != null && fup.isJobFavorite(project.getFullName())) {
                 // probably various ways to get this across various Jenkins installs.
                 Mailer.UserProperty mail = user.getProperty(Mailer.UserProperty.class);
                 users.add(mail.getAddress());
