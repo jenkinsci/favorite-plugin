@@ -8,8 +8,8 @@
     <name>Favorite</name>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin</url>
     <scm>
-        <connection>scm:git:https://github.com/jenkinsci/favorite-plugin.git</connection>
-        <developerConnection>scm:git:https://github.com/jenkinsci/favorite-plugin.git</developerConnection>
+        <connection>scm:git:git@github.com:jenkinsci/favorite-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:jenkinsci/favorite-plugin.git</developerConnection>
         <url>https://github.com/jenkinsci/favorite-plugin</url>
     </scm>
     <parent>
