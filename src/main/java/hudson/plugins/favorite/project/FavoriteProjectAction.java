@@ -85,10 +85,12 @@ public class FavoriteProjectAction implements Action {
         String userName = authentication.getName();
         if (!userName.equals("anonymous")) {
             User user = Hudson.getInstance().getUser(userName);
-            FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
-            return fup.isJobFavorite(project.getFullName());
-        } else {
-            return false;
+            if (user!=null) {// this shouldn't happen, but let's be defensive
+                FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
+                return fup.isJobFavorite(project.getFullName());
+            }
         }
+
+        return false;
     }
 }
