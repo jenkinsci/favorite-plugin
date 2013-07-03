@@ -21,33 +21,25 @@ public class FavoriteFilter extends ViewJobFilter {
 
     @Override
     public List<TopLevelItem> filter(List<TopLevelItem> added, List<TopLevelItem> all, View filteringView) {
-        List<TopLevelItem> filtered = new ArrayList<TopLevelItem>(added);
+        List<TopLevelItem> filtered = new ArrayList<TopLevelItem>();
 
         Authentication authentication = Hudson.getAuthentication();
 
         String name = authentication.getName();
         if (name != null && authentication.isAuthenticated()) {
             User user = Hudson.getInstance().getUser(name);
-            if (user == null) {
-                clearView(all, filtered);
-            } else {
+            if (user != null) {
                 FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
-                for (TopLevelItem item : all) {
-                    if (fup == null || !fup.isJobFavorite(item.getFullName())) {
-                        filtered.remove(item);
+                if (fup != null) {
+                    for (TopLevelItem item : added) {
+                        if (fup.isJobFavorite(item.getFullName())) {
+                            filtered.add(item);
+                        }
                     }
                 }
             }
-        } else {
-            clearView(all, filtered);
         }
         return filtered;
-    }
-
-    private void clearView(List<TopLevelItem> all, List<TopLevelItem> filtered) {
-        for (TopLevelItem item : all) {
-            filtered.remove(item);
-        }
     }
 
 }
