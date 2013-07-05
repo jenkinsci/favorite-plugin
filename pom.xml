@@ -10,7 +10,7 @@
 
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>favorite</artifactId>
-    <version>1.16</version>
+    <version>1.17-SNAPSHOT</version>
     <packaging>hpi</packaging>
 
     <name>Favorite</name>
