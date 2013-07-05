@@ -11,7 +11,7 @@
             </a>
           </td>
           <td>
-            <a href="${rootURL}/job/${favorite}">${favorite}</a>
+            <a href="${rootURL}/${descriptor.toItem(favorite).url}">${favorite}</a>
           </td>
         </tr>
       </j:forEach>
