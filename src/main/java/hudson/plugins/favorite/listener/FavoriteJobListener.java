@@ -8,9 +8,13 @@ import hudson.model.listeners.ItemListener;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Extension
 public class FavoriteJobListener extends ItemListener {
+
+  private final static Logger LOGGER = Logger.getLogger(FavoriteJobListener.class.getName());
 
   @Override
   public void onRenamed(Item item, String oldName, String newName) {
@@ -26,7 +30,7 @@ public class FavoriteJobListener extends ItemListener {
             }
           }
         } catch (IOException e) {
-          e.printStackTrace();
+          LOGGER.log(Level.SEVERE, "Could not migrate favourites from <" + oldName + "> to <" + newName + ">. Favourites have been lost for this item.", e);
         }
       }
     }
@@ -45,7 +49,7 @@ public class FavoriteJobListener extends ItemListener {
             }
           }
         } catch (IOException e) {
-          e.printStackTrace();
+          LOGGER.log(Level.WARNING, "Remove favourites deleted item <" + item.getFullName() + ">.", e);
         }
       }
     }

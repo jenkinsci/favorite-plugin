@@ -1,5 +1,6 @@
 package hudson.plugins.favorite.user;
 
+import com.google.common.collect.Maps;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.model.UserProperty;
@@ -12,38 +13,48 @@ import org.kohsuke.stapler.export.ExportedBean;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 
+/**
+ * Do not use directly.
+ * Instead @Inject {@link hudson.plugins.favorite.Favorites}.
+ */
 @ExportedBean(defaultVisibility = 999)
 public class FavoriteUserProperty extends UserProperty {
+
     @Extension
     public static final UserPropertyDescriptor DESCRIPTOR = new FavoriteUserPropertyDescriptor();
 
     @DataBoundConstructor
-    public FavoriteUserProperty() {
-        this.getDescriptor();
-    }
+    public FavoriteUserProperty() {}
 
-    private List<String> favorites = new ArrayList<String>();
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    transient List<String> favorites = new ArrayList<String>();
 
-    public List<String> getFavorites() {
-        return favorites;
+    private ConcurrentMap<String, Boolean> data = Maps.newConcurrentMap();
+
+    public Set<String> getFavorites() {
+        return data.keySet();
     }
 
     public void addFavorite(String job) throws IOException {
-        favorites.add(job);
+        data.put(job, true);
         user.save();
     }
 
     public void removeFavorite(String job) throws IOException {
-        favorites.remove(job);
+        data.put(job, false);
         user.save();
     }
 
-    public void toggleFavorite(String job) throws IOException {
+    public boolean toggleFavorite(String job) throws IOException {
         if (isJobFavorite(job)) {
             removeFavorite(job);
+            return false;
         } else {
             addFavorite(job);
+            return true;
         }
     }
 
@@ -53,7 +64,19 @@ public class FavoriteUserProperty extends UserProperty {
     }
 
     public boolean isJobFavorite(String job) {
-        return favorites.contains(job);
+        Boolean favorite;
+        return ((favorite = data.get(job)) != null) ? favorite : false;
+    }
+
+    /**
+     * Checks if the user has a favorite entry for this job
+     * e.g. this is true when the user has favoriteted or unfavoriteted a job
+     * but not true for when a job has not been favorited by this user
+     * @param job path
+     * @return favorite
+     */
+    public boolean hasFavorite(String job) {
+        return data.containsKey(job);
     }
 
     @Override
@@ -61,4 +84,17 @@ public class FavoriteUserProperty extends UserProperty {
         return DESCRIPTOR;
     }
 
+    /**
+     * Migrates this properties storage from favourite's list to a map of booleans
+     * @return this
+     */
+    Object readResolve() {
+        if (favorites != null) {
+            for (String job : favorites) {
+                data.put(job, true);
+            }
+            favorites = null;
+        }
+        return this;
+    }
 }

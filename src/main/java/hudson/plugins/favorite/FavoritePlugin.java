@@ -1,7 +1,10 @@
 package hudson.plugins.favorite;
 
+import com.google.inject.Inject;
 import hudson.Plugin;
+import hudson.model.Item;
 import hudson.model.User;
+import hudson.plugins.favorite.Favorites.FavoriteException;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import org.acegisecurity.Authentication;
 import org.kohsuke.stapler.QueryParameter;
@@ -11,31 +14,32 @@ import org.kohsuke.stapler.StaplerResponse;
 import java.io.IOException;
 import jenkins.model.Jenkins;
 
+import javax.annotation.Nonnull;
+
 public class FavoritePlugin extends Plugin {
+    // For stapler
     public void doToggleFavorite(StaplerRequest req, StaplerResponse resp, @QueryParameter String job, @QueryParameter String userName, @QueryParameter Boolean redirect) throws IOException {
         if ("".equals(userName) || userName == null) {
             Authentication authentication = Jenkins.getAuthentication();
             userName = authentication.getName();
         }
-        if (!userName.equals("anonymous")) {
-            User user = Jenkins.getInstance().getUser(userName);
-            FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
+        Jenkins jenkins = Jenkins.getInstance();
+        if (jenkins == null) {
+            throw new IllegalStateException("Jenkins not started");
+        }
+        User user = jenkins.getUser(userName);
+        if (user != null && !isAnonymous(user)) {
             try {
-                if (fup == null) {
-                    user.addProperty(new FavoriteUserProperty());
-                    fup = user.getProperty(FavoriteUserProperty.class);
-                }
-                fup.toggleFavorite(job);
-                user.save();
-            } catch (IOException e) {
-                e.printStackTrace();
+                Favorites.toggleFavorite(user, getItem(job));
+            } catch (FavoriteException e) {
+                throw new IOException(e);
             }
         }
         if(redirect) {
             if (!job.contains("/"))
             {
               // Works for default URL pattern: rootUrl/job/jobName
-              resp.sendRedirect(resp.encodeRedirectURL(Jenkins.getInstance().getRootUrl() + "job/" + job));
+              resp.sendRedirect(resp.encodeRedirectURL(jenkins.getRootUrl() + "job/" + job));
             }
             else
             {
@@ -52,8 +56,24 @@ public class FavoritePlugin extends Plugin {
                   urlPostfix.append("/job/");
                 }
               }
-              resp.sendRedirect(resp.encodeRedirectURL(Jenkins.getInstance().getRootUrl() + urlPostfix.toString()));
+              resp.sendRedirect(resp.encodeRedirectURL(jenkins.getRootUrl() + urlPostfix.toString()));
             }
         }
+    }
+
+    static boolean isAnonymous(@Nonnull User user) {
+        return user.getFullName().equalsIgnoreCase("anonymous");
+    }
+
+    public static Item getItem(String fullName) {
+        Jenkins jenkins = Jenkins.getInstance();
+        if (jenkins == null) {
+            throw new IllegalStateException("Jenkins not started");
+        }
+        Item item = jenkins.getItemByFullName(fullName);
+        if (item == null) {
+            throw new IllegalArgumentException("Item <" + fullName + "> does not exist");
+        }
+        return item;
     }
 }

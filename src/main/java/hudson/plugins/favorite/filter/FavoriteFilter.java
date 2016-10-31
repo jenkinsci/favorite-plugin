@@ -7,6 +7,7 @@ import hudson.model.User;
 import hudson.model.View;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import hudson.views.ViewJobFilter;
+import jenkins.model.Jenkins;
 import org.acegisecurity.Authentication;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -27,7 +28,11 @@ public class FavoriteFilter extends ViewJobFilter {
 
         String name = authentication.getName();
         if (name != null && authentication.isAuthenticated()) {
-            User user = Hudson.getInstance().getUser(name);
+            Jenkins jenkins = Jenkins.getInstance();
+            if (jenkins == null) {
+                throw new IllegalStateException("Jenkins not started");
+            }
+            User user = jenkins.getUser(name);
             if (user != null) {
                 FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
                 if (fup != null) {

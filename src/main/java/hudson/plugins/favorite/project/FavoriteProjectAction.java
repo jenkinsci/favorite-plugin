@@ -10,7 +10,10 @@ import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.favorite.Messages;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
+import jenkins.model.Jenkins;
 import org.acegisecurity.Authentication;
+
+import javax.annotation.Nonnull;
 
 public class FavoriteProjectAction implements Action {
     final private AbstractProject<?, ?> project;
@@ -44,7 +47,11 @@ public class FavoriteProjectAction implements Action {
     public String getUrlName() {
         if (hasPermission() && isSupportedJobType()) {
             try {
-				return Hudson.getInstance().getRootUrl() + "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(),"UTF-8") + "&userName=" + URLEncoder.encode(getUserName(),"UTF-8") + "&redirect=true";
+                Jenkins jenkins = Jenkins.getInstance();
+                if (jenkins == null) {
+                    throw new IllegalStateException("Jenkins not started");
+                }
+				return jenkins.getRootUrl() + "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(),"UTF-8") + "&userName=" + URLEncoder.encode(getUserName(),"UTF-8") + "&redirect=true";
 			} catch (UnsupportedEncodingException e) {
 				
 	            return null;
@@ -76,7 +83,7 @@ public class FavoriteProjectAction implements Action {
     }
 
     private String getUserName() {
-        Authentication authentication = Hudson.getAuthentication();
+        Authentication authentication = getJenkins().getAuthentication();
         return authentication.getName();
     }
 
@@ -84,7 +91,7 @@ public class FavoriteProjectAction implements Action {
         Authentication authentication = Hudson.getAuthentication();
         String userName = authentication.getName();
         if (!userName.equals("anonymous")) {
-            User user = Hudson.getInstance().getUser(userName);
+            User user = getJenkins().getUser(userName);
             if (user!=null) {// this shouldn't happen, but let's be defensive
                 FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
                 return fup.isJobFavorite(project.getFullName());
@@ -92,5 +99,14 @@ public class FavoriteProjectAction implements Action {
         }
 
         return false;
+    }
+
+    @Nonnull
+    Jenkins getJenkins() {
+        Jenkins jenkins = Jenkins.getInstance();
+        if (jenkins == null) {
+            throw new IllegalStateException("Jenkins not started");
+        }
+        return jenkins;
     }
 }
