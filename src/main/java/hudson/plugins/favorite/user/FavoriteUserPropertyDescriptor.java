@@ -29,8 +29,12 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
     }
 
     public AutoCompletionCandidates doAutoCompleteJob(@QueryParameter String value) {
+        Jenkins jenkins = Jenkins.getInstance();
+        if (jenkins == null) {
+            throw new IllegalStateException("Jenkins not started");
+        }
         AutoCompletionCandidates c = new AutoCompletionCandidates();
-        for (String job : Hudson.getInstance().getJobNames()) {
+        for (String job : jenkins.getJobNames()) {
             if (job.toLowerCase().startsWith(value.toLowerCase())) {
                 c.add(job);
             }
@@ -41,6 +45,9 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
     public Item toItem(String fullName) {
         if (StringUtils.isEmpty(fullName)) return null;
         ItemGroup<? extends Item> container = Jenkins.getInstance();
+        if (container == null) {
+            throw new IllegalStateException("Jenkins not started");
+        }
         int start = 0;
         int index = fullName.indexOf('/', start);
         while (index != -1) {

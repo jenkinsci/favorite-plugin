@@ -7,6 +7,7 @@ import hudson.model.User;
 import hudson.plugins.favorite.Messages;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import hudson.views.ListViewColumn;
+import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.acegisecurity.Authentication;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -50,7 +51,14 @@ public class FavoriteColumn extends ListViewColumn {
     private FavoriteUserProperty getFavoriteUserProperty() {
         Authentication authentication = Hudson.getAuthentication();
         String name = authentication.getName();
-        User user = Hudson.getInstance().getUser(name);
+        Jenkins jenkins = Jenkins.getInstance();
+        if (jenkins == null) {
+            throw new IllegalStateException("Jenkins not started");
+        }
+        User user = jenkins.getUser(name);
+        if (user == null) {
+            throw new IllegalStateException("Can't find user " + name);
+        }
         return user.getProperty(FavoriteUserProperty.class);
     }
 
