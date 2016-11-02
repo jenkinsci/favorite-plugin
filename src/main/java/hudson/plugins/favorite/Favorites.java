@@ -3,6 +3,7 @@ package hudson.plugins.favorite;
 import com.google.inject.Singleton;
 import hudson.model.Item;
 import hudson.model.User;
+import hudson.plugins.favorite.listener.FavoriteListener;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 
 import javax.annotation.Nonnull;
@@ -33,15 +34,10 @@ public final class Favorites {
      * @param user to check
      * @param item to check
      * @return favorite state
-     * @throws FavoriteException
      */
-    public static boolean isFavorite(@Nonnull User user, @Nonnull Item item) throws FavoriteException {
-        try {
-            FavoriteUserProperty property = getProperty(user);
-            return property.isJobFavorite(item.getFullName());
-        } catch (IOException e) {
-            throw new FavoriteException("Could not determine Favorite state. User: <" + user.getFullName() + "> Item: <" + item.getFullName() + ">", e);
-        }
+    public static boolean isFavorite(@Nonnull User user, @Nonnull Item item) {
+        FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
+        return fup != null && fup.isJobFavorite(item.getFullName());
     }
 
     /**
@@ -63,6 +59,7 @@ public final class Favorites {
 
     /**
      * Add an item as a favorite for a user
+     * Fires {@link FavoriteListener#fireOnAddFavourite(Item, User)}
      * @param user to add the favorite to
      * @param item to favorite
      * @throws FavoriteException
@@ -72,6 +69,7 @@ public final class Favorites {
             if (!isFavorite(user, item)) {
                 FavoriteUserProperty property = getProperty(user);
                 property.addFavorite(item.getFullName());
+                FavoriteListener.fireOnAddFavourite(item, user);
             } else {
                 throw new FavoriteException("Favourite is already set for User: <" + user.getFullName() + "> Item: <" + item.getFullName() + ">");
             }
@@ -81,7 +79,8 @@ public final class Favorites {
     }
 
     /**
-     * Add an item as a favorite for a user
+     * Remove an item as a favorite for a user
+     * Fires {@link FavoriteListener#fireOnRemoveFavourite(Item, User)}
      * @param user to remove the favorite from
      * @param item to favorite
      * @throws FavoriteException
@@ -91,6 +90,7 @@ public final class Favorites {
             if (isFavorite(user, item)) {
                 FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
                 fup.removeFavorite(item.getFullName());
+                FavoriteListener.fireOnRemoveFavourite(item, user);
             } else {
                 throw new FavoriteException("Favourite is already unset for User: <" + user.getFullName() + "> Item: <" + item.getFullName() + ">");
             }

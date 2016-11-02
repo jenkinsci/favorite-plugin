@@ -5,6 +5,7 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.TaskListener;
 import hudson.model.User;
+import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import hudson.tasks.Mailer;
 import org.apache.commons.lang.StringUtils;
@@ -23,8 +24,7 @@ public class FavoriteUsersEmailTokenMacro extends DataBoundTokenMacro {
         List<String> users = new ArrayList<String>();
         AbstractProject project = context.getProject();
         for (User user : User.getAll()) {
-            FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
-            if (fup != null && fup.isJobFavorite(project.getFullName())) {
+            if (Favorites.isFavorite(user, project)) {
                 // probably various ways to get this across various Jenkins installs.
                 Mailer.UserProperty mail = user.getProperty(Mailer.UserProperty.class);
                 users.add(mail.getAddress());

@@ -5,7 +5,6 @@ import hudson.Plugin;
 import hudson.model.Item;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites.FavoriteException;
-import hudson.plugins.favorite.user.FavoriteUserProperty;
 import org.acegisecurity.Authentication;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
@@ -28,6 +27,7 @@ public class FavoritePlugin extends Plugin {
             throw new IllegalStateException("Jenkins not started");
         }
         User user = jenkins.getUser(userName);
+        Item item = jenkins.getItem(job);
         if (user != null && !isAnonymous(user)) {
             try {
                 Favorites.toggleFavorite(user, getItem(job));

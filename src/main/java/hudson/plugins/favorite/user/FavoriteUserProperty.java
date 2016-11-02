@@ -58,6 +58,11 @@ public class FavoriteUserProperty extends UserProperty {
         }
     }
 
+    void deleteFavourite(String job) throws IOException {
+        data.remove(job);
+        user.save();
+    }
+
     @Override
     public UserProperty reconfigure(StaplerRequest req, JSONObject form) throws Descriptor.FormException {
         return this;
