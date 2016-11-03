@@ -22,6 +22,16 @@
             <name>Larry Shatzer, Jr.</name>
             <email>larrys@gmail.com</email>
         </developer>
+        <developer>
+            <id>jamesdumay</id>
+            <name>Larry Shatzer, Jr.</name>
+            <email>jdumay@cloudbees.com</email>
+        </developer>
+        <developer>
+            <id>michaelneale</id>
+            <name>Larry Shatzer, Jr.</name>
+            <email>mneale@cloudbees.com</email>
+        </developer>
     </developers>
 
     <scm>
