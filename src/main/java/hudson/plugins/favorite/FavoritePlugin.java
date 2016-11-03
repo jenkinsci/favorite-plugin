@@ -27,7 +27,6 @@ public class FavoritePlugin extends Plugin {
             throw new IllegalStateException("Jenkins not started");
         }
         User user = jenkins.getUser(userName);
-        Item item = jenkins.getItem(job);
         if (user != null && !isAnonymous(user)) {
             try {
                 Favorites.toggleFavorite(user, getItem(job));

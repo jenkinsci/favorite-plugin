@@ -18,7 +18,11 @@ public abstract class FavoriteListener implements ExtensionPoint {
     private static final Logger LOGGER = Logger.getLogger(FavoriteListener.class.getName());
 
     public static Iterable<FavoriteListener> all() {
-        return Jenkins.getInstance().getExtensionList(FavoriteListener.class);
+        Jenkins jenkins = Jenkins.getInstance();
+        if (jenkins == null) {
+            throw new IllegalStateException("Jenkins not started");
+        }
+        return jenkins.getExtensionList(FavoriteListener.class);
     }
 
     public static void fireOnAddFavourite(Item item, User user) {
