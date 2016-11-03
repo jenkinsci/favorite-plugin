@@ -5,7 +5,6 @@ import hudson.Plugin;
 import hudson.model.Item;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites.FavoriteException;
-import hudson.plugins.favorite.user.FavoriteUserProperty;
 import org.acegisecurity.Authentication;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;

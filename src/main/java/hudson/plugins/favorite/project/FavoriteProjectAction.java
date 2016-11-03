@@ -8,6 +8,7 @@ import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.Hudson;
 import hudson.model.User;
+import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.Messages;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import jenkins.model.Jenkins;
@@ -92,10 +93,7 @@ public class FavoriteProjectAction implements Action {
         String userName = authentication.getName();
         if (!userName.equals("anonymous")) {
             User user = getJenkins().getUser(userName);
-            if (user!=null) {// this shouldn't happen, but let's be defensive
-                FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
-                return fup.isJobFavorite(project.getFullName());
-            }
+            return user != null && Favorites.isFavorite(user, project);
         }
 
         return false;

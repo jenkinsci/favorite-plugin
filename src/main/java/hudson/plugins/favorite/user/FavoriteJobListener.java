@@ -1,11 +1,11 @@
-package hudson.plugins.favorite.listener;
+package hudson.plugins.favorite.user;
 
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Item;
 import hudson.model.User;
 import hudson.model.listeners.ItemListener;
-import hudson.plugins.favorite.user.FavoriteUserProperty;
+import hudson.plugins.favorite.FavoritePlugin;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -23,11 +23,8 @@ public class FavoriteJobListener extends ItemListener {
         FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
         try {
           if (fup != null) {
-            if (fup.isJobFavorite(oldName)) {
-              fup.removeFavorite(oldName);
-              fup.addFavorite(newName);
-              user.save();
-            }
+            fup.deleteFavourite(oldName);
+            fup.addFavorite(newName);
           }
         } catch (IOException e) {
           LOGGER.log(Level.SEVERE, "Could not migrate favourites from <" + oldName + "> to <" + newName + ">. Favourites have been lost for this item.", e);
@@ -43,10 +40,7 @@ public class FavoriteJobListener extends ItemListener {
         FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
         try {
           if (fup != null) {
-            if (fup.isJobFavorite(item.getFullName())) {
-              fup.removeFavorite(item.getFullName());
-              user.save();
-            }
+            fup.deleteFavourite(item.getFullName());
           }
         } catch (IOException e) {
           LOGGER.log(Level.WARNING, "Remove favourites deleted item <" + item.getFullName() + ">.", e);

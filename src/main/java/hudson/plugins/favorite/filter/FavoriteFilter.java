@@ -5,6 +5,7 @@ import hudson.model.Hudson;
 import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.model.View;
+import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import hudson.views.ViewJobFilter;
 import jenkins.model.Jenkins;
@@ -34,12 +35,9 @@ public class FavoriteFilter extends ViewJobFilter {
             }
             User user = jenkins.getUser(name);
             if (user != null) {
-                FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
-                if (fup != null) {
-                    for (TopLevelItem item : added) {
-                        if (fup.isJobFavorite(item.getFullName())) {
-                            filtered.add(item);
-                        }
+                for (TopLevelItem item : added) {
+                    if (Favorites.isFavorite(user, item)) {
+                        filtered.add(item);
                     }
                 }
             }
