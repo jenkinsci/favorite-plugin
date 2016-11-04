@@ -10,7 +10,7 @@
 
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>favorite</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.0.1</version>
     <packaging>hpi</packaging>
 
     <name>Favorite</name>
@@ -38,7 +38,7 @@
         <connection>scm:git:git@github.com:jenkinsci/favorite-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:jenkinsci/favorite-plugin.git</developerConnection>
         <url>https://github.com/jenkinsci/favorite-plugin</url>
-      <tag>HEAD</tag>
+      <tag>favorite-2.0.1</tag>
   </scm>
 
     <repositories>
