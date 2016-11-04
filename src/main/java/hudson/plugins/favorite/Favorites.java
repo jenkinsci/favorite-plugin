@@ -1,13 +1,18 @@
 package hudson.plugins.favorite;
 
-import com.google.inject.Singleton;
+import com.google.common.base.Predicates;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterators;
 import hudson.model.Item;
 import hudson.model.User;
 import hudson.plugins.favorite.listener.FavoriteListener;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
+import jenkins.model.Jenkins;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Public API for Favorites
@@ -97,6 +102,43 @@ public final class Favorites {
         } catch (IOException e) {
             throw new FavoriteException("Could not remove Favorite. User: <" + user.getFullName() + "> Item: <" + item.getFullName() + ">", e);
         }
+    }
+
+    /**
+     * Get all items that the provided user has favorited
+     * @param user to lookup favorites for
+     * @return favorite items
+     */
+    public static Iterable<Item> getFavorites(@Nonnull User user) {
+        FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
+        if (fup == null) {
+            return ImmutableList.of();
+        }
+        Set<String> favorites = fup.getFavorites();
+        if (favorites.isEmpty()) {
+            return ImmutableList.of();
+        }
+        final Iterator<String> iterator = favorites.iterator();
+        final Jenkins jenkins = Jenkins.getInstance();
+        if (jenkins == null) {
+            throw new IllegalStateException("Jenkins not started");
+        }
+        return new Iterable<Item>() {
+            @Override
+            public Iterator<Item> iterator() {
+                return Iterators.filter(new Iterator<Item>() {
+                    @Override
+                    public boolean hasNext() {
+                        return iterator.hasNext();
+                    }
+
+                    @Override
+                    public Item next() {
+                        return jenkins.getItemByFullName(iterator.next());
+                    }
+                }, Predicates.<Item>notNull());
+            }
+        };
     }
 
     /**

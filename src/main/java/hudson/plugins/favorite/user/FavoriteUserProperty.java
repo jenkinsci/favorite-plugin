@@ -1,5 +1,6 @@
 package hudson.plugins.favorite.user;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import hudson.Extension;
 import hudson.model.Descriptor;
@@ -10,9 +11,11 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.ExportedBean;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
@@ -35,7 +38,12 @@ public class FavoriteUserProperty extends UserProperty {
     private ConcurrentMap<String, Boolean> data = Maps.newConcurrentMap();
 
     public Set<String> getFavorites() {
-        return data.keySet();
+        return Maps.filterEntries(data, new Predicate<Entry<String, Boolean>>() {
+            @Override
+            public boolean apply(@Nullable Entry<String, Boolean> input) {
+                return input != null && input.getValue();
+            }
+        }).keySet();
     }
 
     public void addFavorite(String job) throws IOException {
