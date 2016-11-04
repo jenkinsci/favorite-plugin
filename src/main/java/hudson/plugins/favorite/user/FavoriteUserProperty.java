@@ -95,6 +95,7 @@ public class FavoriteUserProperty extends UserProperty {
      */
     Object readResolve() {
         if (favorites != null) {
+            data = Maps.newConcurrentMap();
             for (String job : favorites) {
                 data.put(job, true);
             }
