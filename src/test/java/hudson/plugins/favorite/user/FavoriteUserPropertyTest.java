@@ -1,7 +1,9 @@
 package hudson.plugins.favorite.user;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -22,5 +24,7 @@ public class FavoriteUserPropertyTest {
         assertTrue(property.hasFavorite("foo"));
         assertTrue(property.hasFavorite("bar"));
         assertTrue(property.hasFavorite("baz"));
+
+        assertEquals(ImmutableList.copyOf(property.getAllFavorites()), ImmutableList.copyOf(property.getFavorites()));
     }
 }
