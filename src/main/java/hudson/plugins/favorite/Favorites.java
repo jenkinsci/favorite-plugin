@@ -136,6 +136,12 @@ public final class Favorites {
                     public Item next() {
                         return jenkins.getItemByFullName(iterator.next());
                     }
+                    
+                    /* Fix build. */
+                    @Override
+                    public void remove() { 
+                        throw new UnsupportedOperationException(); 
+                    }
                 }, Predicates.<Item>notNull());
             }
         };
