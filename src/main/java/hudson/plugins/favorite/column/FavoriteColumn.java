@@ -51,6 +51,15 @@ public class FavoriteColumn extends ListViewColumn {
         }
     }
 
+    public String getStarClassName(String job) {
+        FavoriteUserProperty fup = getFavoriteUserProperty();
+        if (fup == null || !fup.isJobFavorite(job)) {
+            return "icon-fav-inactive";
+        } else {
+            return "icon-fav-active";
+        }
+    }
+
     private FavoriteUserProperty getFavoriteUserProperty() {
         Authentication authentication = Hudson.getAuthentication();
         String name = authentication.getName();

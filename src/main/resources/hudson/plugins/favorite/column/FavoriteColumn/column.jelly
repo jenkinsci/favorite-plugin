@@ -4,9 +4,10 @@
   <j:if test="${it.isLoggedIn()}">
     <j:set var="sortData" value="${it.getSortData(job.getFullName())}"/>
     <j:set var="star" value="${it.getStar(job.getFullName())}"/>
+    <j:set var="starClass" value="${it.getStarClassName(job.getFullName())}"/>
     <td data="${sortData}">
       <a onclick="return toggleFavorite('${job.getFullName()}', '${id.userId}', this)" href="#">
-        <img src="${imagesURL}/${subIconSize}/${star}" border="0" id="fav_${job.getFullName()}"/>
+        <img src="${imagesURL}/${subIconSize}/${star}" border="0" id="fav_${job.getFullName()}" class="${starClass}"/>
       </a>
     </td>
   </j:if>
