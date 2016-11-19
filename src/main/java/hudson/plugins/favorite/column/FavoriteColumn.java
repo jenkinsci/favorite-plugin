@@ -42,13 +42,21 @@ public class FavoriteColumn extends ListViewColumn {
         }
     }
 
-    public String getStar(String job) {
+    public String getStarClassName(String job) {
         FavoriteUserProperty fup = getFavoriteUserProperty();
         if (fup == null || !fup.isJobFavorite(job)) {
-            return "star.png";
+            return "icon-fav-inactive";
         } else {
-            return "star-gold.png";
+            return "icon-fav-active";
         }
+    }
+
+    public String getSizeClassFromIconSize(String iconSize) {
+        if ("16x16".equals(iconSize)) return "icon-sm";
+        if ("24x24".equals(iconSize)) return "icon-md";
+        if ("32x32".equals(iconSize)) return "icon-lg";
+        if ("48x48".equals(iconSize)) return "icon-xlg";
+        return "icon-md";
     }
 
     private FavoriteUserProperty getFavoriteUserProperty() {
