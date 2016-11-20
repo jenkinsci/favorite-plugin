@@ -8,6 +8,7 @@ function toggleFavorite(job, user, a) {
     image.classList.add("icon-fav-active");
     image.classList.remove("icon-fav-inactive");
     hoverNotification('お気に入りに追加', a.parentNode);
+    window.dispatchEvent(new CustomEvent('favorite-plugin-icon-change', { transition: "active-to-inactive" }));
   } else {
     if (image.hasAttribute("src")) {
       image.src = image.src.replace("star-gold.png", "star.png");
@@ -15,6 +16,7 @@ function toggleFavorite(job, user, a) {
     image.classList.add("icon-fav-inactive");
     image.classList.remove("icon-fav-active");
     hoverNotification('お気に入りから削除', a.parentNode);
+    window.dispatchEvent(new CustomEvent('favorite-plugin-icon-change', { transition: "inactive-to-active" }));
   }
   return false;
 }
