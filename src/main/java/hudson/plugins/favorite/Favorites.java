@@ -136,10 +136,6 @@ public final class Favorites {
                     public Item next() {
                         return jenkins.getItemByFullName(iterator.next());
                     }
-
-                    /* Java 7 compatibility fallback */
-                    @Override
-                    public void remove() { throw new UnsupportedOperationException(); }
                 }, Predicates.<Item>notNull());
             }
         };
