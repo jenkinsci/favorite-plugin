@@ -8,7 +8,7 @@
         <tr id="favrow_${favorite}">
           <td>
             <a onclick="return toggleFavorite('${favorite}', '${it.id}', this)" href="#">
-              <img src="${imagesURL}/16x16/star-gold.png" border="0" id="fav_${favorite}" class="icon-fav-active"/>
+              <img src="${imagesURL}/16x16/star-gold.png" border="0" id="fav_${favorite}" class="icon-fav-active icon-sm"/>
             </a>
           </td>
           <td>

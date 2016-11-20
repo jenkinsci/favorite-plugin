@@ -60,6 +60,14 @@ public class FavoriteColumn extends ListViewColumn {
         }
     }
 
+    public String getSizeClassFromIconSize(String iconSize) {
+        if ("16x16".equals(iconSize)) return "icon-sm";
+        if ("24x24".equals(iconSize)) return "icon-md";
+        if ("32x32".equals(iconSize)) return "icon-lg";
+        if ("48x48".equals(iconSize)) return "icon-xlg";
+        return "icon-md";
+    }
+
     private FavoriteUserProperty getFavoriteUserProperty() {
         Authentication authentication = Hudson.getAuthentication();
         String name = authentication.getName();

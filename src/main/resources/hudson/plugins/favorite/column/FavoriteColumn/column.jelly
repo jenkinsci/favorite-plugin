@@ -5,9 +5,10 @@
     <j:set var="sortData" value="${it.getSortData(job.getFullName())}"/>
     <j:set var="star" value="${it.getStar(job.getFullName())}"/>
     <j:set var="starClass" value="${it.getStarClassName(job.getFullName())}"/>
+    <j:set var="sizeClass" value="${it.getSizeClassFromIconSize(subIconSize)}"/>
     <td data="${sortData}">
       <a onclick="return toggleFavorite('${job.getFullName()}', '${id.userId}', this)" href="#">
-        <img src="${imagesURL}/${subIconSize}/${star}" border="0" id="fav_${job.getFullName()}" class="${starClass}"/>
+        <img src="${imagesURL}/${subIconSize}/${star}" border="0" id="fav_${job.getFullName()}" class="${starClass} ${sizeClass}"/>
       </a>
     </td>
   </j:if>
