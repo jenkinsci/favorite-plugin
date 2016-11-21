@@ -114,7 +114,7 @@ public final class Favorites {
         if (fup == null) {
             return ImmutableList.of();
         }
-        Set<String> favorites = fup.getFavorites();
+        Set<String> favorites = fup.getAllFavorites();
         if (favorites.isEmpty()) {
             return ImmutableList.of();
         }

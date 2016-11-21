@@ -1,6 +1,8 @@
 package hudson.plugins.favorite.user;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import hudson.Extension;
 import hudson.model.Descriptor;
@@ -15,6 +17,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
@@ -37,7 +40,21 @@ public class FavoriteUserProperty extends UserProperty {
 
     private ConcurrentMap<String, Boolean> data = Maps.newConcurrentMap();
 
-    public Set<String> getFavorites() {
+    /**
+     * Use {#getAllFavorites()}
+     * @return favorites
+     */
+    @Deprecated
+    public List<String> getFavorites() {
+        return ImmutableList.copyOf(Maps.filterEntries(data, new Predicate<Entry<String, Boolean>>() {
+            @Override
+            public boolean apply(@Nullable Entry<String, Boolean> input) {
+                return input != null && input.getValue();
+            }
+        }).keySet());
+    }
+
+    public Set<String> getAllFavorites() {
         return Maps.filterEntries(data, new Predicate<Entry<String, Boolean>>() {
             @Override
             public boolean apply(@Nullable Entry<String, Boolean> input) {
