@@ -37,7 +37,7 @@ Build the `target/favorite.hpi` plugin file with the `mvn package` command.
 Startup Jenkins with the Plugin.  
 
 ```
-mvn clean package hpi:run -DskipTests
+mvn clean package hpi:run -DskipTests -Djenkins.version=2.32
 ```
 
 Now go to http://localhost:8080/jenkins and test the Plugin.
