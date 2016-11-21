@@ -16,12 +16,6 @@
     <name>Favorite</name>
     <url>http://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin</url>
 
-    <licenses>
-        <license>
-            <name>MIT license</name>
-            <comments>All source code is under the MIT license.</comments>
-        </license>
-    </licenses>
     <developers>
         <developer>
             <id>lshatzer</id>
@@ -77,18 +71,7 @@
             <version>1.5.1</version>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.jenkins-ci.plugins</groupId>
-            <artifactId>junit</artifactId>
-            <version>1.19</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
-    <properties>
-        <jenkins.version>2.32</jenkins.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hpi-plugin.version>1.120</hpi-plugin.version>
-    </properties>
 </project>  
 <!--
    TODOs:

@@ -136,7 +136,7 @@ public final class Favorites {
                     public Item next() {
                         return jenkins.getItemByFullName(iterator.next());
                     }
-
+                    
                     /* Fix build. */
                     @Override
                     public void remove() { 
