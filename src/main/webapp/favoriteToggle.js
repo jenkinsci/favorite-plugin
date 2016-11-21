@@ -1,1 +1,0 @@
-/* MOVED: src/main/resources/hudson/plugins/favorite/assets/javascript.jelly */
