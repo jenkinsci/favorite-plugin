@@ -1,0 +1,27 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core">
+  <script type="text/javascript">
+    function toggleFavorite(job, user, a) {
+      new Ajax.Request(rootURL + "/plugin/favorite/toggleFavorite?job=" + job + "&amp;userName=" + user);
+      var favIcon = document.getElementById("fav_" + job);
+      if (favIcon.classList.contains("icon-fav-inactive")) {
+        favIcon.classList.add("icon-fav-active");
+        favIcon.classList.remove("icon-fav-inactive");
+        hoverNotification("${%favoriteAdded}", a.parentNode);
+        window.dispatchEvent(new CustomEvent('favorite-plugin-icon-change', {
+          transition: "active-to-inactive",
+          job: job
+        }));
+      } else {
+        favIcon.classList.add("icon-fav-inactive");
+        favIcon.classList.remove("icon-fav-active");
+        hoverNotification("${%favoriteDeleted}", a.parentNode);
+        window.dispatchEvent(new CustomEvent('favorite-plugin-icon-change', {
+          transition: "inactive-to-active",
+          job: job
+        }));
+      }
+      return false;
+    }
+  </script>
+</j:jelly>
