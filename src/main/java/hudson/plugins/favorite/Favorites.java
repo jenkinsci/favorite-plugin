@@ -139,8 +139,8 @@ public final class Favorites {
                     
                     /* Fix build. */
                     @Override
-                    public void remove() { 
-                        throw new UnsupportedOperationException(); 
+                    public void remove() {
+                        throw new UnsupportedOperationException();
                     }
                 }, Predicates.<Item>notNull());
             }
