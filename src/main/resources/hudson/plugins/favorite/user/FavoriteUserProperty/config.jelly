@@ -1,8 +1,8 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <st:include page="/hudson/plugins/favorite/assets/css.jelly" />
-  <st:include page="/hudson/plugins/favorite/assets/javascript.jelly" />
+  <st:include page="/hudson/plugins/favorite/assets/css.jelly" class="${instance.assetClass}" />
+  <st:include page="/hudson/plugins/favorite/assets/javascript.jelly" class="${instance.assetClass}" />
   <f:block>
     <table id="favorites">
       <j:forEach var="favorite" items="${instance.favorites}">

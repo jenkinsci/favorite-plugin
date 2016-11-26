@@ -8,6 +8,7 @@ import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
+import hudson.plugins.favorite.assets.Asset;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
@@ -127,5 +128,9 @@ public class FavoriteUserProperty extends UserProperty {
             favorites = null;
         }
         return this;
+    }
+
+    public Class getAssetClass() {
+        return Asset.class;
     }
 }
