@@ -49,6 +49,29 @@ Remember to clean the `work` dir if something strange is happening, like plugin 
 rm -rf work/*
 ```
 
+### Pre Release Tests
+
+**Testcase 1: Favorite Column on Job List Page**
+
+ * You are on the Job List Page and have created at least one Build Job.
+ * On the right a column 'Fav' needs to show up and show a grey star for the job.
+ * With a click on the grey star the star turns golden and the job is added as favorite.
+ * Preview: 
+   * ![testcase-1-favorite-column](https://cloud.githubusercontent.com/assets/12599965/20640106/2d7b5094-b3d6-11e6-8623-180056acb82d.gif)
+
+
+**Testcase 2: Favorite Entries on User Config Page**
+
+ * On the Jenkins Start Page click on the small arrow right to your username in the top right corner.
+ * In the appearing dropdown click on configure.
+ * When scrolling down to 'Favorites' section you will see all your favorites.
+ * When clicking the golden star you can remove a job as favorite.
+ * Preview:
+   * ![testcase-2-favorite-config](https://cloud.githubusercontent.com/assets/12599965/20640200/f0c3b806-b3d7-11e6-9fd9-43a2676b0dc8.gif)
+
+
+
+ 
 ## License
 
 to be done
