@@ -51,4 +51,4 @@ rm -rf work/*
 
 ## License
 
-to be done
+Licensed under [MIT License](./LICENSE.md)
