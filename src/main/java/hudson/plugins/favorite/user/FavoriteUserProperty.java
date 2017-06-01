@@ -1,6 +1,5 @@
 package hudson.plugins.favorite.user;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,15 +47,13 @@ public class FavoriteUserProperty extends UserProperty {
 
     private transient long lastValidated = 0;
 
-    private transient Clock clock = new Clock();
-
     /**
      * Use {#getAllFavorites()}
      * @return favorites
      */
     @Deprecated
     public List<String> getFavorites() {
-        validateFavoritesExist();
+        removeFavoritesWhichDoNotExist();
         return ImmutableList.copyOf(Maps.filterEntries(data, new Predicate<Entry<String, Boolean>>() {
             @Override
             public boolean apply(@Nullable Entry<String, Boolean> input) {
@@ -67,7 +63,7 @@ public class FavoriteUserProperty extends UserProperty {
     }
 
     public Set<String> getAllFavorites() {
-        validateFavoritesExist();
+        removeFavoritesWhichDoNotExist();
         return Maps.filterEntries(data, new Predicate<Entry<String, Boolean>>() {
             @Override
             public boolean apply(@Nullable Entry<String, Boolean> input) {
@@ -142,25 +138,17 @@ public class FavoriteUserProperty extends UserProperty {
         return this;
     }
 
-    private void validateFavoritesExist() {
-        if (lastValidated + TimeUnit.HOURS.toMillis(1) > clock.getTime()) {
-            lastValidated = System.currentTimeMillis();
-            Jenkins jenkins = Jenkins.getInstance();
-            for (String fullName : ImmutableSet.copyOf(data.keySet())) {
-                if (jenkins.getItem(fullName) == null) {
-                    try {
-                        deleteFavourite(fullName);
-                    } catch (IOException e) {
-                        LOGGER.log(Level.SEVERE, "Could not purge favorite '" + fullName + "'", e);
-                    }
+    private void removeFavoritesWhichDoNotExist() {
+        Jenkins jenkins = Jenkins.getInstance();
+        for (String fullName : ImmutableSet.copyOf(data.keySet())) {
+            if (jenkins.getItem(fullName) == null) {
+                try {
+                    deleteFavourite(fullName);
+                } catch (IOException e) {
+                    LOGGER.log(Level.SEVERE, "Could not purge favorite '" + fullName + "'", e);
                 }
             }
         }
-    }
-
-    @VisibleForTesting
-    public void setClock(Clock clock) {
-        this.clock = clock;
     }
 
     public Class getAssetClass() {
