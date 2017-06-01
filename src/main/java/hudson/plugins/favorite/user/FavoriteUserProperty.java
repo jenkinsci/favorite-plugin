@@ -1,14 +1,16 @@
 package hudson.plugins.favorite.user;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
 import hudson.plugins.favorite.assets.Asset;
+import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
@@ -18,10 +20,12 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Do not use directly.
@@ -29,6 +33,8 @@ import java.util.concurrent.ConcurrentMap;
  */
 @ExportedBean(defaultVisibility = 999)
 public class FavoriteUserProperty extends UserProperty {
+
+    private static final Logger LOGGER = Logger.getLogger(FavoriteUserProperty.class.getName());
 
     @Extension
     public static final UserPropertyDescriptor DESCRIPTOR = new FavoriteUserPropertyDescriptor();
@@ -41,12 +47,17 @@ public class FavoriteUserProperty extends UserProperty {
 
     private ConcurrentMap<String, Boolean> data = Maps.newConcurrentMap();
 
+    private transient long lastValidated = 0;
+
+    private transient Clock clock = new Clock();
+
     /**
      * Use {#getAllFavorites()}
      * @return favorites
      */
     @Deprecated
     public List<String> getFavorites() {
+        validateFavoritesExist();
         return ImmutableList.copyOf(Maps.filterEntries(data, new Predicate<Entry<String, Boolean>>() {
             @Override
             public boolean apply(@Nullable Entry<String, Boolean> input) {
@@ -56,6 +67,7 @@ public class FavoriteUserProperty extends UserProperty {
     }
 
     public Set<String> getAllFavorites() {
+        validateFavoritesExist();
         return Maps.filterEntries(data, new Predicate<Entry<String, Boolean>>() {
             @Override
             public boolean apply(@Nullable Entry<String, Boolean> input) {
@@ -128,6 +140,27 @@ public class FavoriteUserProperty extends UserProperty {
             favorites = null;
         }
         return this;
+    }
+
+    private void validateFavoritesExist() {
+        if (lastValidated + TimeUnit.HOURS.toMillis(1) > clock.getTime()) {
+            lastValidated = System.currentTimeMillis();
+            Jenkins jenkins = Jenkins.getInstance();
+            for (String fullName : ImmutableSet.copyOf(data.keySet())) {
+                if (jenkins.getItem(fullName) == null) {
+                    try {
+                        deleteFavourite(fullName);
+                    } catch (IOException e) {
+                        LOGGER.log(Level.SEVERE, "Could not purge favorite '" + fullName + "'", e);
+                    }
+                }
+            }
+        }
+    }
+
+    @VisibleForTesting
+    public void setClock(Clock clock) {
+        this.clock = clock;
     }
 
     public Class getAssetClass() {
