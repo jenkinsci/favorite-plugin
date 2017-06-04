@@ -141,7 +141,7 @@ public class FavoriteUserProperty extends UserProperty {
     private void removeFavoritesWhichDoNotExist() {
         Jenkins jenkins = Jenkins.getInstance();
         for (String fullName : ImmutableSet.copyOf(data.keySet())) {
-            if (jenkins.getItem(fullName) == null) {
+            if (jenkins.getItemByFullName(fullName) == null) {
                 try {
                     deleteFavourite(fullName);
                 } catch (IOException e) {

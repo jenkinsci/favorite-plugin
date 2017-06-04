@@ -3,6 +3,7 @@ package hudson.plugins.favorite.user;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import hudson.model.FreeStyleProject;
 import hudson.model.User;
 import org.junit.Before;
 import org.junit.Rule;
@@ -52,27 +53,32 @@ public class FavoriteUserPropertyTest {
 
     @Test
     public void lazyDeletionGetAllFavorites() throws Exception {
+        rule.createFolder("f").createProject(FreeStyleProject.class, "z");
+
         rule.createFreeStyleProject("d");
 
         property.addFavorite("a");
         property.addFavorite("b");
         property.addFavorite("c");
         property.addFavorite("d");
+        property.addFavorite("f/z");
 
         // a,b,c do not exist and should be removed
-        assertEquals(Sets.newHashSet("d"), property.getAllFavorites());
+        assertEquals(Sets.newHashSet("d", "f/z"), property.getAllFavorites());
     }
 
     @Test
     public void lazyDeletionGetFavorites() throws Exception {
+        rule.createFolder("f").createProject(FreeStyleProject.class, "z");
         rule.createFreeStyleProject("d");
 
         property.addFavorite("a");
         property.addFavorite("b");
         property.addFavorite("c");
         property.addFavorite("d");
+        property.addFavorite("f/z");
 
         // a,b,c do not exist and should be removed
-        assertEquals(ImmutableSet.of("d"), ImmutableSet.copyOf(property.getFavorites()));
+        assertEquals(ImmutableSet.of("d", "f/z"), ImmutableSet.copyOf(property.getFavorites()));
     }
 }
