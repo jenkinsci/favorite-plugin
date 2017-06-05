@@ -1,20 +1,18 @@
 package hudson.plugins.favorite.project;
 
 import hudson.matrix.MatrixConfiguration;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.Messages;
-import hudson.plugins.favorite.user.FavoriteUserProperty;
 import jenkins.model.Jenkins;
 import org.acegisecurity.Authentication;
 
 import javax.annotation.Nonnull;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class FavoriteProjectAction implements Action {
     final private AbstractProject<?, ?> project;
@@ -52,8 +50,8 @@ public class FavoriteProjectAction implements Action {
                 if (jenkins == null) {
                     throw new IllegalStateException("Jenkins not started");
                 }
-				return jenkins.getRootUrl() + "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(),"UTF-8") + "&userName=" + URLEncoder.encode(getUserName(),"UTF-8") + "&redirect=true";
-			} catch (UnsupportedEncodingException e) {
+                return "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(), "UTF-8") + "&userName=" + URLEncoder.encode(getUserName(), "UTF-8") + "&redirect=true";
+            } catch (UnsupportedEncodingException e) {
 				
 	            return null;
 			}
