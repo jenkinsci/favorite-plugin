@@ -8,12 +8,13 @@ import jenkins.model.Jenkins;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.interceptor.RequirePOST;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class FavoritePlugin extends Plugin {
-    // For stapler
+    @RequirePOST
     public void doToggleFavorite(StaplerRequest req, StaplerResponse resp, @QueryParameter String job, @QueryParameter Boolean redirect) throws IOException {
         Jenkins jenkins = Jenkins.getInstance();
         if (jenkins == null) {

@@ -1,8 +1,8 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core">
   <script type="text/javascript">
-    function toggleFavorite(job, user, a) {
-      new Ajax.Request(rootURL + "/plugin/favorite/toggleFavorite?job=" + job + "&amp;userName=" + user);
+    function toggleFavorite(job, a) {
+      new Ajax.Request(rootURL + "/plugin/favorite/toggleFavorite?job=" + job, {method: 'POST'});
       var favIcon = document.getElementById("fav_" + job);
       if (favIcon.classList.contains("icon-fav-inactive")) {
         favIcon.classList.add("icon-fav-active");

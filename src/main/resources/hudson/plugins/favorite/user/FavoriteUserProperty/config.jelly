@@ -8,12 +8,12 @@
       <j:forEach var="favorite" items="${instance.favorites}">
         <tr id="favrow_${favorite}">
           <td>
-            <a onclick="return toggleFavorite('${favorite}', '${it.id}', this)" href="#">
+            <a onclick="return toggleFavorite('${favorite}', this)" href="#">
               <span id="fav_${favorite}" class="icon-fav-active icon-sm"></span>
             </a>
           </td>
           <td>
-            <a href="${rootURL}/${descriptor.toItem(favorite).url}">${favorite}</a>
+            <a href="${rootURL}/${descriptor.toItem(favorite).url}" >${favorite}</a>
           </td>
         </tr>
       </j:forEach>

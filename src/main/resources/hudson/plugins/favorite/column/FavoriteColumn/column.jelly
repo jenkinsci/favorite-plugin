@@ -6,7 +6,7 @@
     <j:set var="starClass" value="${it.getStarClassName(job.getFullName())}"/>
     <j:set var="sizeClass" value="${it.getSizeClassFromIconSize(subIconSize)}"/>
     <td data="${sortData}">
-      <a onclick="return toggleFavorite('${job.getFullName()}', '${id.userId}', this)" href="#">
+      <a onclick="return toggleFavorite('${job.getFullName()}', this)" href="#">
         <span id="fav_${job.getFullName()}" class="${starClass} ${sizeClass}"></span>
       </a>
     </td>
