@@ -1,0 +1,42 @@
+/** ICONS **/
+
+.icon-fav-active,
+.icon-fav-inactive {
+  display:block;
+  border:0px;
+  background-repeat: no-repeat;
+}
+.icon-fav-active {
+  background-image: url(../../../../../images/48x48/star-gold.png);
+}
+.icon-fav-inactive {
+  background-image: url(../../../../../images/48x48/star.png);
+}
+
+
+/** SIZES **/
+
+.icon-fav-inactive.icon-sm,
+.icon-fav-active.icon-sm {
+  width:16px;
+  height:16px;
+  background-size: 15px 15px;
+}
+.icon-fav-inactive.icon-md,
+.icon-fav-active.icon-md {
+  width:24px;
+  height:24px;
+  background-size: 23px 23px;
+}
+.icon-fav-inactive.icon-lg,
+.icon-fav-active.icon-lg {
+  width:32px;
+  height:32px;
+  background-size: 31px 31px;
+}
+.icon-fav-inactive.icon-xlg,
+.icon-fav-active.icon-xlg {
+  width:48px;
+  height:48px;
+  background-size: 47px 47px;
+}
