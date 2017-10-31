@@ -14,7 +14,15 @@
     <packaging>hpi</packaging>
 
     <name>Favorite</name>
-    <url>http://wiki.jenkins-ci.org/display/JENKINS/Favorite+Plugin</url>
+    <url>https://wiki.jenkins.io/display/JENKINS/Favorite+Plugin</url>
+
+    <licenses>
+       <license>
+          <name>MIT License</name>
+          <url>https://opensource.org/licenses/MIT</url>
+          <distribution>repo</distribution>
+       </license>
+    </licenses>
 
     <developers>
         <developer>
