@@ -1,5 +1,5 @@
 function toggleFavorite(job, a) {
-  new Ajax.Request(rootURL + "/plugin/favorite/toggleFavorite?job=" + job, {method: 'POST'});
+  new Ajax.Request(rootURL + "/plugin/favorite/toggleFavorite?job=" + encodeURIComponent(job), {method: 'POST'});
   var favIcon = document.getElementById("fav_" + job);
   if (favIcon.classList.contains("icon-fav-inactive")) {
     favIcon.classList.add("icon-fav-active");
