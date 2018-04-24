@@ -17,8 +17,10 @@ import org.jvnet.hudson.test.JenkinsRule;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -46,6 +48,50 @@ public class FavoriteListenerTest {
         // Toggle it off
         Favorites.removeFavorite(user, item);
         assertEquals(item, listener.removeFavorites.get(user));
+    }
+
+    @Test
+    public void testRenameNoFavorite() throws Exception {
+        // GIVEN
+        FreeStyleProject old = rule.createFreeStyleProject("Old project");
+        User user = User.get("bob");
+
+        FavoriteUserProperty property = user.getProperty(FavoriteUserProperty.class);
+        Set<String> favorites = property.getAllFavorites();
+
+        FavoriteJobListener listener = new FavoriteJobListener();
+        assertFalse("Should not contain 'New project'", favorites.contains("New project"));
+        assertFalse("Should contain 'Old project'", favorites.contains("Old project"));
+
+        // WHEN
+        listener.onRenamed(old, "Old project", "New project");
+
+        // THEN
+        assertFalse("Should contain 'New project'", favorites.contains("New project"));
+        assertFalse("Should not contain 'Old project'", favorites.contains("Old project"));
+    }
+
+    @Test
+    public void testRenameFavorite() throws Exception {
+        // GIVEN
+        FreeStyleProject old = rule.createFreeStyleProject("Old project");
+        User user = User.get("bob");
+
+        FavoriteUserProperty property = user.getProperty(FavoriteUserProperty.class);
+        Set<String> favorites = property.getAllFavorites();
+
+        Favorites.addFavorite(user, old);
+
+        FavoriteJobListener listener = new FavoriteJobListener();
+        assertFalse("Should not contain 'New project'", favorites.contains("New project"));
+        assertTrue("Should contain 'Old project'", favorites.contains("Old project"));
+
+        // WHEN
+        listener.onRenamed(old, "Old project", "New project");
+
+        // THEN
+        assertTrue("Should contain 'New project'", favorites.contains("New project"));
+        assertFalse("Should not contain 'Old project'", favorites.contains("Old project"));
     }
 
     @Extension
