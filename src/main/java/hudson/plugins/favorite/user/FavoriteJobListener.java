@@ -21,7 +21,7 @@ public class FavoriteJobListener extends ItemListener {
       for (User user : User.getAll()) {
         FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
         try {
-          if (fup != null) {
+          if (fup != null && fup.isJobFavorite(oldName)) {
             fup.deleteFavourite(oldName);
             fup.addFavorite(newName);
           }
