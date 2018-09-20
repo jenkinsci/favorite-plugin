@@ -6,10 +6,8 @@ import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.model.View;
 import hudson.plugins.favorite.Favorites;
-import hudson.plugins.favorite.user.FavoriteUserProperty;
 import hudson.views.ViewJobFilter;
 import jenkins.model.Jenkins;
-import org.acegisecurity.Authentication;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.util.ArrayList;
@@ -25,24 +23,36 @@ public class FavoriteFilter extends ViewJobFilter {
     public List<TopLevelItem> filter(List<TopLevelItem> added, List<TopLevelItem> all, View filteringView) {
         List<TopLevelItem> filtered = new ArrayList<TopLevelItem>();
 
-        Authentication authentication = Hudson.getAuthentication();
-
-        String name = authentication.getName();
-        if (name != null && authentication.isAuthenticated()) {
-            Jenkins jenkins = Jenkins.getInstance();
-            if (jenkins == null) {
-                throw new IllegalStateException("Jenkins not started");
-            }
-            User user = jenkins.getUser(name);
-            if (user != null) {
-                for (TopLevelItem item : added) {
-                    if (Favorites.isFavorite(user, item)) {
-                        filtered.add(item);
-                    }
+        User user = this.getUser();
+        if (user != null) {
+            for (TopLevelItem item : all) {
+                if (Favorites.isFavorite(user, item)) {
+                    filtered.add(item);
                 }
             }
         }
-        return filtered;
+
+        List<TopLevelItem> sorted = new ArrayList<TopLevelItem>(all);
+        sorted.retainAll(filtered);
+        return sorted;
+    }
+
+    private User getUser() {
+        Jenkins jenkinsInstance = Jenkins.getInstance();
+
+        if (jenkinsInstance == null) {
+            throw new IllegalStateException("No jenkins instance found");
+        }
+
+        try {
+            return jenkinsInstance.getMe();
+        } catch (Exception e) {
+            try {
+                return jenkinsInstance.getUser(Hudson.ANONYMOUS.getName());
+            } catch (Exception e2) {
+                return null;
+            }
+        }
     }
 
 }
