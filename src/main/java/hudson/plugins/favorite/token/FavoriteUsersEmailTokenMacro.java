@@ -1,8 +1,11 @@
 package hudson.plugins.favorite.token;
 
 import hudson.Extension;
+import hudson.FilePath;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Job;
+import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
@@ -19,10 +22,14 @@ import java.util.List;
 @Extension
 public class FavoriteUsersEmailTokenMacro extends DataBoundTokenMacro {
     @Override
-    public String evaluate(AbstractBuild<?, ?> context, TaskListener listener, String macroName)
-            throws MacroEvaluationException, IOException, InterruptedException {
+    public String evaluate(AbstractBuild<?, ?> context, TaskListener listener, String macroName) {
+        return evaluate(context, context.getWorkspace(), listener, macroName);
+    }
+
+    @Override
+    public String evaluate(Run<?,?> run, FilePath workspace, TaskListener listener, String macroName) {
         List<String> users = new ArrayList<String>();
-        AbstractProject project = context.getProject();
+        Job<?,?> project = run.getParent();
         for (User user : User.getAll()) {
             if (Favorites.isFavorite(user, project)) {
                 // probably various ways to get this across various Jenkins installs.
