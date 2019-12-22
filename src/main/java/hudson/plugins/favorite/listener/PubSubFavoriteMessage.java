@@ -1,5 +1,6 @@
 package hudson.plugins.favorite.listener;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.Extension;
 import hudson.model.Item;
 import hudson.model.User;
@@ -14,6 +15,8 @@ import org.jenkinsci.plugins.pubsub.Message;
 
 @Extension(optional = true)
 public class PubSubFavoriteMessage extends AccessControlledMessage<PubSubFavoriteMessage> {
+    private static final long serialVersionUID = 1L;
+
     transient Item item;
     transient User user;
 
@@ -43,8 +46,9 @@ public class PubSubFavoriteMessage extends AccessControlledMessage<PubSubFavorit
      * {@inheritDoc}
      */
     @Override
+    @SuppressFBWarnings(value="CN_IDIOM_NO_SUPER_CALL", justification = "Parent is returning a different object")
     public Message clone() {
-        final Message clone = new PubSubFavoriteMessage();
+        final PubSubFavoriteMessage clone = new PubSubFavoriteMessage();
         clone.putAll(this);
         return clone;
     }
