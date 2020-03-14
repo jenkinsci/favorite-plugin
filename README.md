@@ -94,7 +94,7 @@ rm -rf work/*
 ## Changelog
 For recent versions, see [GitHub Releases](https://github.com/jenkinsci/favorite-plugin/releases)
 
-For versions 1.23 and older, see [CHANGELOG.md](CHANGELOG.md)
+For versions 2.3.2 and older, see [CHANGELOG.md](CHANGELOG.md)
 
 ## License
 
