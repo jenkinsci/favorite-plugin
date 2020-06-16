@@ -1,8 +1,5 @@
 package hudson.plugins.favorite.user;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import hudson.Extension;
 import hudson.model.Descriptor;
@@ -14,15 +11,16 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.ExportedBean;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Do not use directly.
@@ -40,9 +38,9 @@ public class FavoriteUserProperty extends UserProperty {
     public FavoriteUserProperty() {}
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    transient List<String> favorites = new ArrayList<String>();
+    transient List<String> favorites = new ArrayList<>();
 
-    private ConcurrentMap<String, Boolean> data = Maps.newConcurrentMap();
+    private ConcurrentMap<String, Boolean> data = new ConcurrentHashMap();
 
     private transient long lastValidated = 0;
 
@@ -53,22 +51,14 @@ public class FavoriteUserProperty extends UserProperty {
     @Deprecated
     public List<String> getFavorites() {
         removeFavoritesWhichDoNotExist();
-        return ImmutableList.copyOf(Maps.filterEntries(data, new Predicate<Entry<String, Boolean>>() {
-            @Override
-            public boolean apply(@Nullable Entry<String, Boolean> input) {
-                return input != null && input.getValue();
-            }
-        }).keySet());
+        return Collections.unmodifiableList( data.entrySet().stream().filter( input -> input != null && input.getValue()  )
+                                                 .map( stringBooleanEntry -> stringBooleanEntry.getKey() )
+        .collect( Collectors.toList()) );
     }
 
     public Set<String> getAllFavorites() {
         removeFavoritesWhichDoNotExist();
-        return Maps.filterEntries(data, new Predicate<Entry<String, Boolean>>() {
-            @Override
-            public boolean apply(@Nullable Entry<String, Boolean> input) {
-                return input != null && input.getValue();
-            }
-        }).keySet();
+        return Maps.filterEntries( data, input -> input != null && input.getValue() ).keySet();
     }
 
     public void addFavorite(String job) throws IOException {
@@ -128,7 +118,7 @@ public class FavoriteUserProperty extends UserProperty {
      */
     Object readResolve() {
         if (favorites != null) {
-            data = Maps.newConcurrentMap();
+            data =  new ConcurrentHashMap();
             for (String job : favorites) {
                 data.put(job, true);
             }
@@ -138,8 +128,8 @@ public class FavoriteUserProperty extends UserProperty {
     }
 
     private void removeFavoritesWhichDoNotExist() {
-        Jenkins jenkins = Jenkins.getInstance();
-        for (String fullName : ImmutableSet.copyOf(data.keySet())) {
+        Jenkins jenkins = Jenkins.get();
+        for (String fullName : Collections.unmodifiableSet(data.keySet())) {
             if (jenkins.getItemByFullName(fullName) == null) {
                 try {
                     deleteFavourite(fullName);

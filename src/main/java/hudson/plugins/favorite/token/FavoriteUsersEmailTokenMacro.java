@@ -6,7 +6,6 @@ import hudson.model.AbstractProject;
 import hudson.model.TaskListener;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
-import hudson.plugins.favorite.user.FavoriteUserProperty;
 import hudson.tasks.Mailer;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.tokenmacro.DataBoundTokenMacro;
@@ -21,7 +20,7 @@ public class FavoriteUsersEmailTokenMacro extends DataBoundTokenMacro {
     @Override
     public String evaluate(AbstractBuild<?, ?> context, TaskListener listener, String macroName)
             throws MacroEvaluationException, IOException, InterruptedException {
-        List<String> users = new ArrayList<String>();
+        List<String> users = new ArrayList<>();
         AbstractProject project = context.getProject();
         for (User user : User.getAll()) {
             if (Favorites.isFavorite(user, project)) {

@@ -6,7 +6,6 @@ import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.model.View;
 import hudson.plugins.favorite.Favorites;
-import hudson.plugins.favorite.user.FavoriteUserProperty;
 import hudson.views.ViewJobFilter;
 import jenkins.model.Jenkins;
 import org.acegisecurity.Authentication;
@@ -23,13 +22,13 @@ public class FavoriteFilter extends ViewJobFilter {
 
     @Override
     public List<TopLevelItem> filter(List<TopLevelItem> added, List<TopLevelItem> all, View filteringView) {
-        List<TopLevelItem> filtered = new ArrayList<TopLevelItem>();
+        List<TopLevelItem> filtered = new ArrayList<>();
 
         Authentication authentication = Hudson.getAuthentication();
 
         String name = authentication.getName();
         if (name != null && authentication.isAuthenticated()) {
-            Jenkins jenkins = Jenkins.getInstance();
+            Jenkins jenkins = Jenkins.get();
             if (jenkins == null) {
                 throw new IllegalStateException("Jenkins not started");
             }

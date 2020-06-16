@@ -29,7 +29,7 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
     }
 
     public AutoCompletionCandidates doAutoCompleteJob(@QueryParameter String value) {
-        Jenkins jenkins = Jenkins.getInstance();
+        Jenkins jenkins = Jenkins.get();
         if (jenkins == null) {
             throw new IllegalStateException("Jenkins not started");
         }
@@ -44,7 +44,7 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
 
     public Item toItem(String fullName) {
         if (StringUtils.isEmpty(fullName)) return null;
-        ItemGroup<? extends Item> container = Jenkins.getInstance();
+        ItemGroup<? extends Item> container = Jenkins.get();
         if (container == null) {
             throw new IllegalStateException("Jenkins not started");
         }

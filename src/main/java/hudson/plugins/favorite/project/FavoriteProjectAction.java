@@ -46,7 +46,7 @@ public class FavoriteProjectAction implements Action {
     public String getUrlName() {
         if (hasPermission() && isSupportedJobType()) {
             try {
-                Jenkins jenkins = Jenkins.getInstance();
+                Jenkins jenkins = Jenkins.get();
                 if (jenkins == null) {
                     throw new IllegalStateException("Jenkins not started");
                 }
@@ -63,22 +63,14 @@ public class FavoriteProjectAction implements Action {
     private boolean hasPermission() {
         Authentication authentication = Hudson.getAuthentication();
         String userName = authentication.getName();
-        if (!userName.equals("anonymous")) {
-            return true;
-        } else {
-            return false;
-        }
+        return !userName.equals( "anonymous" );
     }
     
     private boolean isSupportedJobType() {
       // MatrixProjects are supported, but the underlying MatrixConfigurations
       // cannot be referenced like other items because they are using the same
       // pattern like folders
-      if (project instanceof MatrixConfiguration) {
-        return false;
-      } else {
-        return true;
-      }
+        return !( project instanceof MatrixConfiguration );
     }
 
     private String getUserName() {
@@ -99,7 +91,7 @@ public class FavoriteProjectAction implements Action {
 
     @Nonnull
     Jenkins getJenkins() {
-        Jenkins jenkins = Jenkins.getInstance();
+        Jenkins jenkins = Jenkins.get();
         if (jenkins == null) {
             throw new IllegalStateException("Jenkins not started");
         }

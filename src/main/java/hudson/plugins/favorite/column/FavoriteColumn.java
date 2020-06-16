@@ -3,16 +3,14 @@ package hudson.plugins.favorite.column;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
-import hudson.model.Item;
-import hudson.model.TopLevelItem;
 import hudson.model.User;
-import hudson.plugins.favorite.FavoritePlugin;
 import hudson.plugins.favorite.Messages;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import hudson.views.ListViewColumn;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.acegisecurity.Authentication;
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -62,7 +60,7 @@ public class FavoriteColumn extends ListViewColumn {
     private FavoriteUserProperty getFavoriteUserProperty() {
         Authentication authentication = Hudson.getAuthentication();
         String name = authentication.getName();
-        Jenkins jenkins = Jenkins.getInstance();
+        Jenkins jenkins = Jenkins.get();
         if (jenkins == null) {
             throw new IllegalStateException("Jenkins not started");
         }
@@ -90,10 +88,6 @@ public class FavoriteColumn extends ListViewColumn {
 
     public boolean isLoggedIn() {
         Authentication authentication = Hudson.getAuthentication();
-        if (authentication.getName().equals("anonymous")) {
-            return false;
-        } else {
-            return true;
-        }
+        return !StringUtils.equals(authentication.getName(), "anonymous");
     }
 }

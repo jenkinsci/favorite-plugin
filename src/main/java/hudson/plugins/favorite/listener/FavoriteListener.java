@@ -1,9 +1,7 @@
 package hudson.plugins.favorite.listener;
 
-import hudson.Extension;
 import hudson.ExtensionPoint;
 import hudson.model.Item;
-import hudson.model.Job;
 import hudson.model.User;
 import jenkins.model.Jenkins;
 
@@ -18,7 +16,7 @@ public abstract class FavoriteListener implements ExtensionPoint {
     private static final Logger LOGGER = Logger.getLogger(FavoriteListener.class.getName());
 
     public static Iterable<FavoriteListener> all() {
-        Jenkins jenkins = Jenkins.getInstance();
+        Jenkins jenkins = Jenkins.get();
         if (jenkins == null) {
             throw new IllegalStateException("Jenkins not started");
         }

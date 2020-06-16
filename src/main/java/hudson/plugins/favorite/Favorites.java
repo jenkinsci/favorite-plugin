@@ -1,7 +1,6 @@
 package hudson.plugins.favorite;
 
 import com.google.common.base.Predicates;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import hudson.model.Item;
 import hudson.model.User;
@@ -11,6 +10,7 @@ import jenkins.model.Jenkins;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -112,39 +112,34 @@ public final class Favorites {
     public static Iterable<Item> getFavorites(@Nonnull User user) {
         FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
         if (fup == null) {
-            return ImmutableList.of();
+            return Collections.emptyList();
         }
         Set<String> favorites = fup.getAllFavorites();
         if (favorites.isEmpty()) {
-            return ImmutableList.of();
+            return Collections.emptyList();
         }
         final Iterator<String> iterator = favorites.iterator();
-        final Jenkins jenkins = Jenkins.getInstance();
+        final Jenkins jenkins = Jenkins.get();
         if (jenkins == null) {
             throw new IllegalStateException("Jenkins not started");
         }
-        return new Iterable<Item>() {
+        return () -> Iterators.filter( new Iterator<Item>() {
             @Override
-            public Iterator<Item> iterator() {
-                return Iterators.filter(new Iterator<Item>() {
-                    @Override
-                    public boolean hasNext() {
-                        return iterator.hasNext();
-                    }
-
-                    @Override
-                    public Item next() {
-                        return jenkins.getItemByFullName(iterator.next());
-                    }
-                    
-                    /* Fix build. */
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException();
-                    }
-                }, Predicates.<Item>notNull());
+            public boolean hasNext() {
+                return iterator.hasNext();
             }
-        };
+
+            @Override
+            public Item next() {
+                return jenkins.getItemByFullName(iterator.next());
+            }
+
+            /* Fix build. */
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        }, Predicates.notNull());
     }
 
     /**

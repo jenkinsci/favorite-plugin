@@ -12,7 +12,7 @@ import java.util.Collection;
 public class FavoriteProjectActionFactory extends TransientProjectActionFactory {
     @Override
     public Collection<? extends Action> createFor(AbstractProject target) {
-        ArrayList<FavoriteProjectAction> ta = new ArrayList<FavoriteProjectAction>();
+        ArrayList<FavoriteProjectAction> ta = new ArrayList<>();
 		ta.add(new FavoriteProjectAction(target));
         return ta;
     }

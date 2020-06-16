@@ -19,7 +19,7 @@ import java.io.IOException;
 public class FavoritePlugin extends Plugin {
     @RequirePOST
     public void doToggleFavorite(StaplerRequest req, StaplerResponse resp, @QueryParameter String job, @QueryParameter Boolean redirect) throws IOException {
-        Jenkins jenkins = Jenkins.getInstance();
+        Jenkins jenkins = Jenkins.get();
         if (jenkins == null) {
             throw new IllegalStateException("Jenkins not started");
         }
@@ -62,7 +62,7 @@ public class FavoritePlugin extends Plugin {
     }
 
     public static Item getItem(String fullName) {
-        Jenkins jenkins = Jenkins.getInstance();
+        Jenkins jenkins = Jenkins.get();
         if (jenkins == null) {
             throw new IllegalStateException("Jenkins not started");
         }
