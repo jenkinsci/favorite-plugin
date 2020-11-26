@@ -1,0 +1,2 @@
+_extends: .github
+tag-template: favorite-$NEXT_MINOR_VERSION
