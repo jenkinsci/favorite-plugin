@@ -28,7 +28,7 @@
   <properties>
     <java.level>8</java.level>
     <!-- jenkins -->
-    <jenkins.version>2.176.4</jenkins.version>
+    <jenkins.version>2.270</jenkins.version>
     <!-- security spotbugs -->
     <spotbugs.failOnError>false</spotbugs.failOnError>
   </properties>
