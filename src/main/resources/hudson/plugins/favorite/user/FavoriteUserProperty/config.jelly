@@ -3,19 +3,19 @@
          xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <st:adjunct includes="hudson.plugins.favorite.assets"/>
   <f:block>
-    <table id="favorites">
+    <div id="favorites">
       <j:forEach var="favorite" items="${instance.favorites}">
-        <tr id="favrow_${favorite}">
-          <td>
+        <div id="favrow_${favorite}">
+          <div>
             <a onclick="return toggleFavorite('${favorite}', this)" href="#">
               <span id="fav_${favorite}" class="icon-fav-active icon-sm"></span>
             </a>
-          </td>
-          <td>
+          </div>
+          <div>
             <a href="${rootURL}/${descriptor.toItem(favorite).url}" >${favorite}</a>
-          </td>
-        </tr>
+          </div>
+        </div>
       </j:forEach>
-    </table>
+    </div>
   </f:block>
 </j:jelly>
