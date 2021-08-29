@@ -1,5 +1,7 @@
 ## Change Log
 
+**For recent versions, see [GitHub Releases](https://github.com/jenkinsci/favorite-plugin/releases).**
+
 ### v2.3.2 (2018-05-21)
 
 [JENKINS-50603](https://issues.jenkins-ci.org/browse/JENKINS-50603) Fix
