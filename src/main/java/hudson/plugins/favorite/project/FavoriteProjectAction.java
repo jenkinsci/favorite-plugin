@@ -10,7 +10,7 @@ import hudson.plugins.favorite.Messages;
 import jenkins.model.Jenkins;
 import org.acegisecurity.Authentication;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -27,11 +27,7 @@ public class FavoriteProjectAction implements Action {
 
     public String getIconFileName() {
         if (hasPermission() && isSupportedJobType()) {
-            if (isFavorite()) {
-                return "star-gold.png";
-            } else {
-                return "star.png";
-            }
+            return isFavorite() ? "star-large-gold.svg" : "star-large.svg";
         }
         return null;
     }
@@ -89,7 +85,7 @@ public class FavoriteProjectAction implements Action {
         return false;
     }
 
-    @Nonnull
+    @NonNull
     Jenkins getJenkins() {
         Jenkins jenkins = Jenkins.get();
         if (jenkins == null) {
