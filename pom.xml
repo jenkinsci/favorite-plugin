@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>4.24</version>
+    <version>4.33</version>
   </parent>
 
   <groupId>org.jvnet.hudson.plugins</groupId>
@@ -27,7 +27,7 @@
   <properties>
     <java.level>8</java.level>
     <!-- jenkins -->
-    <jenkins.version>2.270</jenkins.version>
+    <jenkins.version>2.319.3</jenkins.version>
     <!-- security spotbugs -->
     <spotbugs.failOnError>false</spotbugs.failOnError>
   </properties>
@@ -74,8 +74,8 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.176.x</artifactId>
-        <version>16</version>
+        <artifactId>bom-2.319.x</artifactId>
+        <version>1148.v7261f385f859</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>

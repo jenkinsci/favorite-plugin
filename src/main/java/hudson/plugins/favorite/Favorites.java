@@ -8,7 +8,7 @@ import hudson.plugins.favorite.listener.FavoriteListener;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import jenkins.model.Jenkins;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
@@ -25,7 +25,7 @@ public final class Favorites {
      * @throws FavoriteException
      * @return favorite state
      */
-    public static boolean toggleFavorite(@Nonnull User user, @Nonnull Item item) throws FavoriteException {
+    public static boolean toggleFavorite(@NonNull User user, @NonNull Item item) throws FavoriteException {
         try {
             FavoriteUserProperty property = getProperty(user);
             return property.toggleFavorite(item.getFullName());
@@ -40,7 +40,7 @@ public final class Favorites {
      * @param item to check
      * @return favorite state
      */
-    public static boolean isFavorite(@Nonnull User user, @Nonnull Item item) {
+    public static boolean isFavorite(@NonNull User user, @NonNull Item item) {
         FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
         return fup != null && fup.isJobFavorite(item.getFullName());
     }
@@ -53,7 +53,7 @@ public final class Favorites {
      * @return favorite state
      * @throws FavoriteException
      */
-    public static boolean hasFavorite(@Nonnull User user, @Nonnull Item item) throws FavoriteException {
+    public static boolean hasFavorite(@NonNull User user, @NonNull Item item) throws FavoriteException {
         try {
             FavoriteUserProperty property = getProperty(user);
             return property.hasFavorite(item.getFullName());
@@ -69,7 +69,7 @@ public final class Favorites {
      * @param item to favorite
      * @throws FavoriteException
      */
-    public static void addFavorite(@Nonnull User user, @Nonnull Item item) throws FavoriteException {
+    public static void addFavorite(@NonNull User user, @NonNull Item item) throws FavoriteException {
         try {
             if (!isFavorite(user, item)) {
                 FavoriteUserProperty property = getProperty(user);
@@ -90,7 +90,7 @@ public final class Favorites {
      * @param item to favorite
      * @throws FavoriteException
      */
-    public static void removeFavorite(@Nonnull User user, @Nonnull Item item) throws FavoriteException {
+    public static void removeFavorite(@NonNull User user, @NonNull Item item) throws FavoriteException {
         try {
             if (isFavorite(user, item)) {
                 FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
@@ -109,7 +109,7 @@ public final class Favorites {
      * @param user to lookup favorites for
      * @return favorite items
      */
-    public static Iterable<Item> getFavorites(@Nonnull User user) {
+    public static Iterable<Item> getFavorites(@NonNull User user) {
         FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
         if (fup == null) {
             return Collections.emptyList();
@@ -149,7 +149,7 @@ public final class Favorites {
      * @throws IOException if there is a problem with the user property
      * @throws IllegalArgumentException when the user is anonymous
      */
-    private static FavoriteUserProperty getProperty(@Nonnull User user) throws IOException {
+    private static FavoriteUserProperty getProperty(@NonNull User user) throws IOException {
         if (FavoritePlugin.isAnonymous(user)) {
             throw new IllegalArgumentException("user cannot be anonymous");
         }

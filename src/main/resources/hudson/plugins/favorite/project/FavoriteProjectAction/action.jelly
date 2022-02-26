@@ -1,6 +1,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
-    <l:task icon="${h.getIconFilePath(action)}" title="${action.displayName}"
+    <j:set var="icon" value="${action.iconClassName != null ? action.iconClassName + ' icon-md' : action.iconFileName}"/>
+    <l:task icon="${icon}" title="${action.displayName}"
             href="${rootURL}/${action.urlName}"
             permission="${app.READ}"
             contextMenu="false"

@@ -12,7 +12,7 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.interceptor.RequirePOST;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 
 @Restricted(NoExternalUse.class)
@@ -57,7 +57,7 @@ public class FavoritePlugin extends Plugin {
         }
     }
 
-    static boolean isAnonymous(@Nonnull User user) {
+    static boolean isAnonymous(@NonNull User user) {
         return user.getFullName().equalsIgnoreCase("anonymous");
     }
 

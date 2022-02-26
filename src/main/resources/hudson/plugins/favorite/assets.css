@@ -7,10 +7,10 @@
   background-repeat: no-repeat;
 }
 .icon-fav-active {
-  background-image: url(../../../../../images/48x48/star-gold.png);
+  background-image: url(../../../../../images/svgs/star-large-gold.svg);
 }
 .icon-fav-inactive {
-  background-image: url(../../../../../images/48x48/star.png);
+  background-image: url(../../../../../images/svgs/star-large.svg);
 }
 
 
