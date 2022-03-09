@@ -6,9 +6,22 @@
     <j:set var="starClass" value="${it.getStarClassName(job.getFullName())}"/>
     <j:set var="sizeClass" value="${it.getSizeClassFromIconSize(subIconSize)}"/>
     <td data="${sortData}">
-      <a onclick="return toggleFavorite('${job.getFullName()}', this)" href="#">
-        <span id="fav_${job.getFullName()}" class="${starClass} ${sizeClass}"></span>
+      <a href="#">
+        <span id="fav_${job.getFullName()}" data-fullName="${job.getFullName()}"
+              class="${starClass} ${sizeClass}"/>
       </a>
+      <script>
+        (function() {
+          var currentScr = document.scripts[document.scripts.length - 1]; <!-- will always be row on which the current FavoriteColumn is added-->
+          var jobRow = currentScr.parentElement;
+          const favoriteLinkTag = jobRow.querySelector("a");
+          favoriteLinkTag.onclick = function(e) {
+            e.preventDefault();
+            const fullName = favoriteLinkTag.querySelector("span").getAttribute("data-fullName");
+            return toggleFavorite(fullName, this);
+          }
+        })()
+      </script>
     </td>
   </j:if>
 </j:jelly>
