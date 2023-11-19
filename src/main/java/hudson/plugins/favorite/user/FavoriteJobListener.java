@@ -3,6 +3,7 @@ package hudson.plugins.favorite.user;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Item;
+import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.model.listeners.ItemListener;
 
@@ -18,7 +19,7 @@ public class FavoriteJobListener extends ItemListener {
 
   @Override
   public void onLocationChanged(Item item, String oldName, String newName) {
-    if (item instanceof AbstractProject<?, ?>) {
+    if (item instanceof TopLevelItem) {
       for (User user : User.getAll()) {
         FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
         try {
