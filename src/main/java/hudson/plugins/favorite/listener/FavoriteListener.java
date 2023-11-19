@@ -43,6 +43,16 @@ public abstract class FavoriteListener implements ExtensionPoint {
         }
     }
 
+    public static void fireOnLocationChangedFavorite(Item item, User user, String oldName, String newName) {
+        for (FavoriteListener listener : all()) {
+            try {
+                listener.onLocationChangedFavorite(item, user, oldName, newName);
+            } catch (Throwable e) {
+                LOGGER.log(Level.WARNING, "There was a problem firing listener " + listener.getClass().getName(), e);
+            }
+        }
+    }
+
     /**
      * Fired when a favorite has been addedfor the user
      * @param item that was favourited
@@ -56,4 +66,13 @@ public abstract class FavoriteListener implements ExtensionPoint {
      * @param user that the favorite was recorded for
      */
     public abstract void onRemoveFavourite(Item item, User user);
+
+    /**
+     * Fired when a favorite has been renamed/moved for the user
+     * @param item that was renamed/moved
+     * @param user that the favorite was recorded for
+     * @param oldName of the favorite
+     * @param newName of the favorite
+     */
+    public void onLocationChangedFavorite(Item item, User user, String oldName, String newName) {}
 }
