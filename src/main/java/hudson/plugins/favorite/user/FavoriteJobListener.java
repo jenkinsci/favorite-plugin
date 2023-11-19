@@ -1,7 +1,6 @@
 package hudson.plugins.favorite.user;
 
 import hudson.Extension;
-import hudson.model.AbstractProject;
 import hudson.model.Item;
 import hudson.model.TopLevelItem;
 import hudson.model.User;
