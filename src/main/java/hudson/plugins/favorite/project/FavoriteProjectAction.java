@@ -1,9 +1,8 @@
 package hudson.plugins.favorite.project;
 
-import hudson.matrix.MatrixConfiguration;
-import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.Hudson;
+import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.Messages;
@@ -15,38 +14,41 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 public class FavoriteProjectAction implements Action {
-    final private AbstractProject<?, ?> project;
+    final private TopLevelItem topLevelItem;
 
-    public FavoriteProjectAction(AbstractProject project) {
-        this.project = project;
+    public FavoriteProjectAction(TopLevelItem project) {
+        this.topLevelItem = project;
     }
 
-    public String getProjectName() {
-        return project.getFullName();
+    public String getItemName() {
+        return topLevelItem.getFullName();
     }
 
+    @Override
     public String getIconFileName() {
-        if (hasPermission() && isSupportedJobType()) {
+        if (hasPermission()) {
             return isFavorite() ? "star-large-gold.svg" : "star-large.svg";
         }
         return null;
     }
 
+    @Override
     public String getDisplayName() {
-        if (hasPermission() && isSupportedJobType()) {
+        if (hasPermission()) {
             return Messages.favoriteColumn();
         }
         return null;
     }
 
+    @Override
     public String getUrlName() {
-        if (hasPermission() && isSupportedJobType()) {
+        if (hasPermission()) {
             try {
                 Jenkins jenkins = Jenkins.get();
                 if (jenkins == null) {
                     throw new IllegalStateException("Jenkins not started");
                 }
-                return "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(), "UTF-8") + "&userName=" + URLEncoder.encode(getUserName(), "UTF-8") + "&redirect=true";
+                return "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getItemName(), "UTF-8") + "&userName=" + URLEncoder.encode(getUserName(), "UTF-8") + "&redirect=true";
             } catch (UnsupportedEncodingException e) {
 				
 	            return null;
@@ -62,13 +64,6 @@ public class FavoriteProjectAction implements Action {
         return !userName.equals( "anonymous" );
     }
     
-    private boolean isSupportedJobType() {
-      // MatrixProjects are supported, but the underlying MatrixConfigurations
-      // cannot be referenced like other items because they are using the same
-      // pattern like folders
-        return !( project instanceof MatrixConfiguration );
-    }
-
     private String getUserName() {
         Authentication authentication = getJenkins().getAuthentication();
         return authentication.getName();
@@ -79,7 +74,7 @@ public class FavoriteProjectAction implements Action {
         String userName = authentication.getName();
         if (!userName.equals("anonymous")) {
             User user = getJenkins().getUser(userName);
-            return user != null && Favorites.isFavorite(user, project);
+            return user != null && Favorites.isFavorite(user, topLevelItem);
         }
 
         return false;
