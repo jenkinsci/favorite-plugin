@@ -1,7 +1,5 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
     <st:adjunct includes="hudson.plugins.favorite.assets"/>
-    <j:if test="${it.isLoggedIn()}">
-        <th>${%Fav}</th>
-    </j:if>
+    <th>${%Fav}</th>
 </j:jelly>

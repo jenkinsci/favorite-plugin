@@ -2,15 +2,12 @@ package hudson.plugins.favorite.column;
 
 import hudson.Extension;
 import hudson.model.Descriptor;
-import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.favorite.Messages;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import hudson.views.ListViewColumn;
-import jenkins.model.Jenkins;
+import hudson.views.ListViewColumnDescriptor;
 import net.sf.json.JSONObject;
-import org.acegisecurity.Authentication;
-import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -29,7 +26,7 @@ public class FavoriteColumn extends ListViewColumn {
         return DESCRIPTOR;
     }
 
-    private static class DescriptorImpl extends Descriptor<ListViewColumn> {
+    private static class DescriptorImpl extends ListViewColumnDescriptor {
         @Override
         public ListViewColumn newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             return new FavoriteColumn();
@@ -38,39 +35,30 @@ public class FavoriteColumn extends ListViewColumn {
         public String getDisplayName() {
             return Messages.favoriteColumn();
         }
-    }
 
-    public String getStarClassName(String job) {
-        FavoriteUserProperty fup = getFavoriteUserProperty();
-        if (fup == null || !fup.isJobFavorite(job)) {
-            return "icon-fav-inactive";
-        } else {
-            return "icon-fav-active";
+        @Override
+        public boolean shownByDefault() {
+            // only show the column for authenticated users
+            return User.current() != null;
         }
     }
 
-    public String getSizeClassFromIconSize(String iconSize) {
-        if ("16x16".equals(iconSize)) return "icon-sm";
-        if ("24x24".equals(iconSize)) return "icon-md";
-        if ("32x32".equals(iconSize)) return "icon-lg";
-        if ("48x48".equals(iconSize)) return "icon-xlg";
-        return "icon-md";
+    @SuppressWarnings(value = "unused") // used by stapler
+    public boolean isFavorite(String job) {
+        FavoriteUserProperty fup = getFavoriteUserProperty();
+        return fup != null && fup.isJobFavorite(job);
     }
 
     private FavoriteUserProperty getFavoriteUserProperty() {
-        Authentication authentication = Hudson.getAuthentication();
-        String name = authentication.getName();
-        Jenkins jenkins = Jenkins.get();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins not started");
-        }
-        User user = jenkins.getUser(name);
+        User user = User.current();
         if (user == null) {
-            throw new IllegalStateException("Can't find user " + name);
+            return null;
         }
+
         return user.getProperty(FavoriteUserProperty.class);
     }
 
+    @SuppressWarnings(value = "unused") // used by stapler
     public int getSortData(String job) {
         FavoriteUserProperty fup = getFavoriteUserProperty();
         if (fup == null || !fup.isJobFavorite(job)) {
@@ -78,16 +66,6 @@ public class FavoriteColumn extends ListViewColumn {
         } else {
             return 1;
         }
-
     }
 
-    public String getUserId() {
-        Authentication authentication = Hudson.getAuthentication();
-        return authentication.getName();
-    }
-
-    public boolean isLoggedIn() {
-        Authentication authentication = Hudson.getAuthentication();
-        return !StringUtils.equals(authentication.getName(), "anonymous");
-    }
 }

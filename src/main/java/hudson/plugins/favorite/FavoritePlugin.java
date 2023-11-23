@@ -17,7 +17,7 @@ import java.io.IOException;
 
 @Restricted(NoExternalUse.class)
 public class FavoritePlugin extends Plugin {
-    @RequirePOST
+
     public void doToggleFavorite(StaplerRequest req, StaplerResponse resp, @QueryParameter String job, @QueryParameter Boolean redirect) throws IOException {
         Jenkins jenkins = Jenkins.get();
         if (jenkins == null) {

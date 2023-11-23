@@ -1,10 +1,12 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
     <j:set var="icon" value="${action.iconClassName != null ? action.iconClassName + ' icon-md' : action.iconFileName}"/>
-    <l:task icon="${icon}" title="${action.displayName}"
-            href="${rootURL}/${action.urlName}"
-            permission="${app.READ}"
-            contextMenu="false"
-            post="true"
-    />
+    <j:if test="${icon!=null}">
+        <l:task icon="${icon}" title="${action.displayName}"
+                href="${rootURL}/${action.urlName}"
+                permission="${app.READ}"
+                contextMenu="false"
+                post="false"
+        />
+    </j:if>
 </j:jelly>

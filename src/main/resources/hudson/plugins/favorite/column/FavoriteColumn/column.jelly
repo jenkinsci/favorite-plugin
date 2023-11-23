@@ -1,27 +1,16 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
-         xmlns:t="/lib/hudson" xmlns:s="/lib/form">
-  <j:if test="${it.isLoggedIn()}">
-    <j:set var="sortData" value="${it.getSortData(job.getFullName())}"/>
-    <j:set var="starClass" value="${it.getStarClassName(job.getFullName())}"/>
-    <j:set var="sizeClass" value="${it.getSizeClassFromIconSize(subIconSize)}"/>
-    <td data="${sortData}">
-      <a href="#">
-        <span id="fav_${job.getFullName()}" data-fullName="${job.getFullName()}"
-              class="${starClass} ${sizeClass}"/>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+  <j:set var="sortData" value="${it.getSortData(job.getFullName())}"/>
+  <j:set var="fav" value="${it.isFavorite(job.getFullName())}"/>
+  <j:set var="sizeClass" value="${icons.toNormalizedIconSizeClass(subIconSize)}"/>
+  <td data="${sortData}" class="jenkins-table__cell--tight">
+    <div class="jenkins-table__cell__button-wrapper">
+      <a href="#" class="jenkins-table__button favorite-toggle" data-fullName="${job.getFullName()}">
+        <span id="fav_${job.getFullName()}" data-fav="${fav}">
+            <l:icon src="symbol-star plugin-ionicons-api" class="icon-fav-active jenkins-!-color-yellow ${sizeClass} ${!fav ? 'jenkins-hidden' : ''}"/>
+            <l:icon src="symbol-star-outline plugin-ionicons-api" class="icon-fav-inactive ${sizeClass} ${fav ? 'jenkins-hidden' : ''}"/>
+        </span>
       </a>
-      <script>
-        (function() {
-          var currentScr = document.scripts[document.scripts.length - 1]; <!-- will always be row on which the current FavoriteColumn is added-->
-          var jobRow = currentScr.parentElement;
-          const favoriteLinkTag = jobRow.querySelector("a");
-          favoriteLinkTag.onclick = function(e) {
-            e.preventDefault();
-            const fullName = favoriteLinkTag.querySelector("span").getAttribute("data-fullName");
-            return toggleFavorite(fullName, this);
-          }
-        })()
-      </script>
-    </td>
-  </j:if>
+    </div>
+  </td>
 </j:jelly>

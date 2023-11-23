@@ -42,25 +42,19 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
         return c;
     }
 
-    public Item toItem(String fullName) {
-        if (StringUtils.isEmpty(fullName)) return null;
-        ItemGroup<? extends Item> container = Jenkins.get();
-        if (container == null) {
-            throw new IllegalStateException("Jenkins not started");
+    @SuppressWarnings(value = "unused") // used by jelly
+    public String toItemUrl(String fullName) {
+        if (StringUtils.isEmpty(fullName)) {
+            return null;
         }
-        int start = 0;
-        int index = fullName.indexOf('/', start);
-        while (index != -1) {
-            Item item = container.getItem(fullName.substring(start, index));
-            if (item instanceof ItemGroup) {
-                container = (ItemGroup<? extends Item>) item;
-                start = index+1;
-                index = fullName.indexOf('/', start);
-            } else {
-                index = fullName.indexOf('/', index + 1);
-            }
+
+        Jenkins jenkins = Jenkins.get();
+        Item item = jenkins.getItemByFullName(fullName);
+        if (item == null) {
+          return null;
         }
-        return container.getItem(fullName.substring(start));
+
+        return jenkins.getRootUrl() + item.getUrl();
     }
 
 }
