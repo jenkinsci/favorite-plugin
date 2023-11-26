@@ -62,7 +62,11 @@ public class FavoriteProjectAction implements Action, IconSpec {
         return !( project instanceof MatrixConfiguration );
     }
 
-    private boolean isFavorite() {
+    /**
+     * Check if associated project is marked as favorite.
+     * @return {@code true} if project is marked as favorite
+     */
+    public boolean isFavorite() {
         User user = User.current();
         return user != null && Favorites.isFavorite(user, project);
     }

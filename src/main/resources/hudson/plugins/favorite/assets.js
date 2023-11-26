@@ -31,7 +31,7 @@ function toggleFavorite(job, a) {
   return false;
 }
 
-Behaviour.specify("A.favorite-toggle", "link.post", 0, (element) => {
+Behaviour.specify("A.favorite-toggle", "favorite.toggle", 0, (element) => {
   element.onclick = (event) => {
     toggleFavoriteOnClick(event, element);
   }

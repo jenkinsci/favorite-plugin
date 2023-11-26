@@ -72,7 +72,7 @@ public class FavoritesPluginTest {
             client.login("bob", "bob");
             // verify favorite action available
             HtmlPage catsPage = client.goTo("job/cats/");
-            assertFalse(hasFavoriteAction(catsPage));
+            assertTrue(hasFavoriteAction(catsPage));
 
             // add favorite
             WebResponse res = requestToggleFavorite(client, "cats", false);
@@ -114,7 +114,7 @@ public class FavoritesPluginTest {
     public void testToggleFavoriteRedirect() throws Exception {
         rule.createFreeStyleProject("cats");
         try (JenkinsRule.WebClient client = rule.createWebClient()) {
-            client.login("bob", "bob");
+            client.login("bob");
             WebResponse res = requestToggleFavorite(client, "cats", true);
             assertEquals(200, res.getStatusCode());
             assertEquals("/jenkins/job/cats/", res.getWebRequest().getUrl().getPath());
@@ -137,13 +137,13 @@ public class FavoritesPluginTest {
     }
 
     private WebResponse requestToggleFavorite(JenkinsRule.WebClient client, String job, boolean redirect) throws Exception {
-        String path = "plugin/favorite/toggleFavorite?job=" + job;
+        String path = "/plugin/favorite/toggleFavorite?job=" + job;
         if (redirect) {
             path += "&redirect=true";
         }
 
-        URL url = new URL(rule.getURL(), path);
-        WebRequest req = new WebRequest(url, HttpMethod.GET);
+        URL url = client.createCrumbedUrl(path);
+        WebRequest req = new WebRequest(url, HttpMethod.POST);
         return client.loadWebResponse(req);
     }
 
