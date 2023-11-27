@@ -28,20 +28,6 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
         return Messages.favoriteUserPropertyDescriptor();
     }
 
-    public AutoCompletionCandidates doAutoCompleteJob(@QueryParameter String value) {
-        Jenkins jenkins = Jenkins.get();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins not started");
-        }
-        AutoCompletionCandidates c = new AutoCompletionCandidates();
-        for (String job : jenkins.getJobNames()) {
-            if (job.toLowerCase().startsWith(value.toLowerCase())) {
-                c.add(job);
-            }
-        }
-        return c;
-    }
-
     public Item toItem(String fullName) {
         if (StringUtils.isEmpty(fullName)) return null;
         ItemGroup<? extends Item> container = Jenkins.get();
