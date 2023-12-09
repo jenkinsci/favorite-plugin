@@ -32,6 +32,8 @@
     <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
     <!-- security spotbugs -->
     <spotbugs.failOnError>false</spotbugs.failOnError>
+    <spotbugs.effort>Max</spotbugs.effort>
+    <spotbugs.threshold>Low</spotbugs.threshold>
   </properties>
 
   <developers>

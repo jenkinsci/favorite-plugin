@@ -3,7 +3,6 @@ package hudson.plugins.favorite.token;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 import hudson.model.Job;
 import hudson.model.Run;
 import hudson.model.TaskListener;
@@ -12,9 +11,7 @@ import hudson.plugins.favorite.Favorites;
 import hudson.tasks.Mailer;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.tokenmacro.DataBoundTokenMacro;
-import org.jenkinsci.plugins.tokenmacro.MacroEvaluationException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +24,7 @@ public class FavoriteUsersEmailTokenMacro extends DataBoundTokenMacro {
 
     @Override
     public String evaluate(Run<?,?> run, FilePath workspace, TaskListener listener, String macroName) {
-        List<String> users = new ArrayList<String>();
+        List<String> users = new ArrayList<>();
         Job<?,?> project = run.getParent();
         for (User user : User.getAll()) {
             if (Favorites.isFavorite(user, project)) {
