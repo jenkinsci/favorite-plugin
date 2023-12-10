@@ -1,8 +1,7 @@
 package hudson.plugins.favorite.project;
 
-import hudson.matrix.MatrixConfiguration;
-import hudson.model.AbstractProject;
 import hudson.model.Action;
+import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.Messages;
@@ -12,23 +11,34 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class FavoriteProjectAction implements Action, IconSpec {
-    final private AbstractProject<?, ?> project;
+    final private TopLevelItem topLevelItem;
 
-    public FavoriteProjectAction(AbstractProject project) {
-        this.project = project;
+    public FavoriteProjectAction(TopLevelItem topLevelItem) {
+        this.topLevelItem = topLevelItem;
     }
 
+    public String getItemName() {
+        return topLevelItem.getFullName();
+    }
+
+    /**
+     * Returns the items name
+     * @return item name
+     * @deprecated use {@link #getItemName()}
+     */
+    @Deprecated
     public String getProjectName() {
-        return project.getFullName();
+        return getItemName();
     }
 
+    @Override
     public String getIconFileName() {
         return null;
     }
 
     @Override
     public String getIconClassName() {
-        if (hasPermission() && isSupportedJobType()) {
+        if (hasPermission()) {
             return isFavorite()
                     ? "symbol-star plugin-ionicons-api"
                     : "symbol-star-outline plugin-ionicons-api";
@@ -36,16 +46,18 @@ public class FavoriteProjectAction implements Action, IconSpec {
         return null;
     }
 
+    @Override
     public String getDisplayName() {
-        if (hasPermission() && isSupportedJobType()) {
+        if (hasPermission()) {
             return Messages.favoriteColumn();
         }
         return null;
     }
 
+    @Override
     public String getUrlName() {
-        if (hasPermission() && isSupportedJobType()) {
-            return "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(), StandardCharsets.UTF_8) + "&redirect=true";
+        if (hasPermission()) {
+            return "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getItemName(), StandardCharsets.UTF_8) + "&redirect=true";
         } else {
             return null;
         }
@@ -54,13 +66,6 @@ public class FavoriteProjectAction implements Action, IconSpec {
     private boolean hasPermission() {
         return User.current() != null;
     }
-    
-    private boolean isSupportedJobType() {
-      // MatrixProjects are supported, but the underlying MatrixConfigurations
-      // cannot be referenced like other items because they are using the same
-      // pattern like folders
-        return !( project instanceof MatrixConfiguration );
-    }
 
     /**
      * Check if associated project is marked as favorite.
@@ -68,7 +73,6 @@ public class FavoriteProjectAction implements Action, IconSpec {
      */
     public boolean isFavorite() {
         User user = User.current();
-        return user != null && Favorites.isFavorite(user, project);
+        return user != null && Favorites.isFavorite(user, topLevelItem);
     }
-
 }
