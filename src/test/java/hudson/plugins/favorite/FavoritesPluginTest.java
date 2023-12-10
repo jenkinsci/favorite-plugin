@@ -1,9 +1,9 @@
 package hudson.plugins.favorite;
 
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import hudson.Extension;
 import hudson.model.Item;
@@ -26,7 +26,7 @@ import org.jvnet.hudson.test.MockAuthorizationStrategy;
 
 public class FavoritesPluginTest {
 
-    private static List<String> events = new CopyOnWriteArrayList<>();
+    private static final List<String> events = new CopyOnWriteArrayList<>();
     @Rule
     public JenkinsRule rule = new JenkinsRule();
 

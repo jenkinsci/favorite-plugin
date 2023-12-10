@@ -1,11 +1,17 @@
 package hudson.plugins.favorite.filter;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+
 import hudson.model.Item;
 import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
 import hudson.security.ACL;
 import hudson.security.ACLContext;
+import java.util.ArrayList;
+import java.util.List;
 import jenkins.model.Jenkins;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,13 +20,6 @@ import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.MockAuthorizationStrategy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
 
 public class FavoriteFilterTest {
 
