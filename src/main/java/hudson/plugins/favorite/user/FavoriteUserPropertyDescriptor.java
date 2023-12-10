@@ -1,9 +1,7 @@
 package hudson.plugins.favorite.user;
 
 import hudson.model.AutoCompletionCandidates;
-import hudson.model.Hudson;
 import hudson.model.Item;
-import hudson.model.ItemGroup;
 import hudson.model.User;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
@@ -26,20 +24,6 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
     @Override
     public String getDisplayName() {
         return Messages.favoriteUserPropertyDescriptor();
-    }
-
-    public AutoCompletionCandidates doAutoCompleteJob(@QueryParameter String value) {
-        Jenkins jenkins = Jenkins.get();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins not started");
-        }
-        AutoCompletionCandidates c = new AutoCompletionCandidates();
-        for (String job : jenkins.getJobNames()) {
-            if (job.toLowerCase().startsWith(value.toLowerCase())) {
-                c.add(job);
-            }
-        }
-        return c;
     }
 
     @SuppressWarnings(value = "unused") // used by jelly

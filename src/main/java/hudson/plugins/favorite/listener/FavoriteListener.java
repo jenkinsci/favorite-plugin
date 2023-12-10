@@ -1,5 +1,6 @@
 package hudson.plugins.favorite.listener;
 
+import hudson.ExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.Item;
 import hudson.model.User;
@@ -16,11 +17,7 @@ public abstract class FavoriteListener implements ExtensionPoint {
     private static final Logger LOGGER = Logger.getLogger(FavoriteListener.class.getName());
 
     public static Iterable<FavoriteListener> all() {
-        Jenkins jenkins = Jenkins.get();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins not started");
-        }
-        return jenkins.getExtensionList(FavoriteListener.class);
+        return ExtensionList.lookup(FavoriteListener.class);
     }
 
     public static void fireOnAddFavourite(Item item, User user) {

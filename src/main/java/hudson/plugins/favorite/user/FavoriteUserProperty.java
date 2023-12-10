@@ -1,6 +1,7 @@
 package hudson.plugins.favorite.user;
 
 import com.google.common.collect.Maps;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.model.UserProperty;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -40,38 +42,59 @@ public class FavoriteUserProperty extends UserProperty {
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     transient List<String> favorites = new ArrayList<>();
 
-    private ConcurrentMap<String, Boolean> data = new ConcurrentHashMap();
+    private ConcurrentMap<String, Boolean> data = new ConcurrentHashMap<>();
 
     private transient long lastValidated = 0;
 
     /**
      * Use {#getAllFavorites()}
-     * @return favorites
+     * @return unmodifiable favorites job set
      */
     @Deprecated
     public List<String> getFavorites() {
         removeFavoritesWhichDoNotExist();
-        return Collections.unmodifiableList( data.entrySet().stream().filter( input -> input != null && input.getValue()  )
-                                                 .map( stringBooleanEntry -> stringBooleanEntry.getKey() )
-        .collect( Collectors.toList()) );
+        return data.entrySet().stream()
+                .filter(input -> input != null && input.getValue())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toUnmodifiableList());
     }
 
+    /**
+     * Get all favorite jobs.
+     * @return unmodifiable favorites job set
+     */
     public Set<String> getAllFavorites() {
         removeFavoritesWhichDoNotExist();
         return Maps.filterEntries( data, input -> input != null && input.getValue() ).keySet();
     }
 
-    public void addFavorite(String job) throws IOException {
+    /**
+     * Add favorite job.
+     * @param job job full name
+     * @throws IOException if error saving status
+     */
+    public void addFavorite(@NonNull String job) throws IOException {
         data.put(job, true);
         user.save();
     }
 
-    public void removeFavorite(String job) throws IOException {
+    /**
+     * Set un-favorite a job.
+     * @param job full job name
+     * @throws IOException if error saving status
+     */
+    public void removeFavorite(@NonNull String job) throws IOException {
         data.put(job, false);
         user.save();
     }
 
-    public boolean toggleFavorite(String job) throws IOException {
+    /**
+     * If job is favorited, then un-favorite it, else favorite it.
+     * @param job full job name
+     * @return true if the new status is favorite, false if new status is not favorite.
+     * @throws IOException if error saving status
+     */
+    public boolean toggleFavorite(@NonNull String job) throws IOException {
         if (isJobFavorite(job)) {
             removeFavorite(job);
             return false;
@@ -81,7 +104,7 @@ public class FavoriteUserProperty extends UserProperty {
         }
     }
 
-    void deleteFavourite(String job) throws IOException {
+    void deleteFavourite(@NonNull String job) throws IOException {
         data.remove(job);
         user.save();
     }
@@ -118,7 +141,7 @@ public class FavoriteUserProperty extends UserProperty {
      */
     Object readResolve() {
         if (favorites != null) {
-            data =  new ConcurrentHashMap();
+            data =  new ConcurrentHashMap<>();
             for (String job : favorites) {
                 data.put(job, true);
             }
