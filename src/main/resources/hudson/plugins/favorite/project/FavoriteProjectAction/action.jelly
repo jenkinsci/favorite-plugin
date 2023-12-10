@@ -1,10 +1,18 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
-    <j:set var="icon" value="${action.iconClassName != null ? action.iconClassName + ' icon-md' : action.iconFileName}"/>
-    <l:task icon="${icon}" title="${action.displayName}"
-            href="${rootURL}/${action.urlName}"
-            permission="${app.READ}"
-            contextMenu="false"
-            post="true"
-    />
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+    <st:adjunct includes="hudson.plugins.favorite.assets"/>
+    <j:set var="fav" value="${action.isFavorite()}"/>
+    <j:if test="${action.getUrlName() != null}">
+        <div class="task">
+            <span class="task-link-wrapper">
+                <a href="#" class="task-link favorite-toggle" data-fullName="${action.getProjectName()}" data-fav="${fav}">
+                    <span class="task-icon-link">
+                        <l:icon src="symbol-star plugin-ionicons-api" class="icon-fav-active jenkins-!-color-yellow ${!fav ? 'jenkins-hidden' : ''}"/>
+                        <l:icon src="symbol-star-outline plugin-ionicons-api" class="icon-fav-inactive ${fav ? 'jenkins-hidden' : ''}"/>
+                    </span>
+                    <span class="task-link-text">${action.displayName}</span>
+                </a>
+            </span>
+        </div>
+    </j:if>
 </j:jelly>

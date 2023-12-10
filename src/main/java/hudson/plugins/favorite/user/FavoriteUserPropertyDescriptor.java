@@ -1,9 +1,7 @@
 package hudson.plugins.favorite.user;
 
 import hudson.model.AutoCompletionCandidates;
-import hudson.model.Hudson;
 import hudson.model.Item;
-import hudson.model.ItemGroup;
 import hudson.model.User;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
@@ -28,39 +26,19 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
         return Messages.favoriteUserPropertyDescriptor();
     }
 
-    public AutoCompletionCandidates doAutoCompleteJob(@QueryParameter String value) {
-        Jenkins jenkins = Jenkins.get();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins not started");
+    @SuppressWarnings(value = "unused") // used by jelly
+    public String toItemUrl(String fullName) {
+        if (StringUtils.isEmpty(fullName)) {
+            return null;
         }
-        AutoCompletionCandidates c = new AutoCompletionCandidates();
-        for (String job : jenkins.getJobNames()) {
-            if (job.toLowerCase().startsWith(value.toLowerCase())) {
-                c.add(job);
-            }
-        }
-        return c;
-    }
 
-    public Item toItem(String fullName) {
-        if (StringUtils.isEmpty(fullName)) return null;
-        ItemGroup<? extends Item> container = Jenkins.get();
-        if (container == null) {
-            throw new IllegalStateException("Jenkins not started");
+        Jenkins jenkins = Jenkins.get();
+        Item item = jenkins.getItemByFullName(fullName);
+        if (item == null) {
+          return null;
         }
-        int start = 0;
-        int index = fullName.indexOf('/', start);
-        while (index != -1) {
-            Item item = container.getItem(fullName.substring(start, index));
-            if (item instanceof ItemGroup) {
-                container = (ItemGroup<? extends Item>) item;
-                start = index+1;
-                index = fullName.indexOf('/', start);
-            } else {
-                index = fullName.indexOf('/', index + 1);
-            }
-        }
-        return container.getItem(fullName.substring(start));
+
+        return jenkins.getRootUrl() + item.getUrl();
     }
 
 }
