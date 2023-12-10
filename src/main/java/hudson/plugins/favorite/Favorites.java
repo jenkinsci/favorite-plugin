@@ -1,18 +1,17 @@
 package hudson.plugins.favorite;
 
-import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.model.Item;
 import hudson.model.User;
 import hudson.plugins.favorite.listener.FavoriteListener;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
-import jenkins.model.Jenkins;
-
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
+import jenkins.model.Jenkins;
 
 /**
  * Public API for Favorites
@@ -126,9 +125,6 @@ public final class Favorites {
         }
         final Iterator<String> iterator = favorites.iterator();
         final Jenkins jenkins = Jenkins.get();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins not started");
-        }
         return () -> Iterators.filter( new Iterator<Item>() {
             @Override
             public boolean hasNext() {
@@ -145,7 +141,7 @@ public final class Favorites {
             public void remove() {
                 throw new UnsupportedOperationException();
             }
-        }, Predicates.notNull());
+        }, Objects::nonNull);
     }
 
     /**
@@ -153,12 +149,8 @@ public final class Favorites {
      * @param user to get the property from
      * @return favorite property
      * @throws IOException if there is a problem with the user property
-     * @throws IllegalArgumentException when the user is anonymous
      */
     private static FavoriteUserProperty getProperty(@NonNull User user) throws IOException {
-        if (FavoritePlugin.isAnonymous(user)) {
-            throw new IllegalArgumentException("user cannot be anonymous");
-        }
         FavoriteUserProperty fup = user.getProperty(FavoriteUserProperty.class);
         if (fup == null) {
             user.addProperty(new FavoriteUserProperty());

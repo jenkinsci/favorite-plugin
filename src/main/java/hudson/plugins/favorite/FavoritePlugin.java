@@ -12,7 +12,6 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.interceptor.RequirePOST;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 
 @Restricted(NoExternalUse.class)
@@ -21,11 +20,8 @@ public class FavoritePlugin extends Plugin {
     @RequirePOST
     public void doToggleFavorite(StaplerRequest req, StaplerResponse resp, @QueryParameter String job, @QueryParameter Boolean redirect) throws IOException {
         Jenkins jenkins = Jenkins.get();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins not started");
-        }
         User user = User.current();
-        if (user != null && !isAnonymous(user)) {
+        if (user != null) {
             try {
                 Favorites.toggleFavorite(user, getItem(job));
             } catch (FavoriteException e) {
@@ -58,15 +54,8 @@ public class FavoritePlugin extends Plugin {
         }
     }
 
-    static boolean isAnonymous(@NonNull User user) {
-        return user.getFullName().equalsIgnoreCase("anonymous");
-    }
-
     public static Item getItem(String fullName) {
         Jenkins jenkins = Jenkins.get();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins not started");
-        }
         Item item = jenkins.getItemByFullName(fullName);
         if (item == null) {
             throw new IllegalArgumentException("Item <" + fullName + "> does not exist");
