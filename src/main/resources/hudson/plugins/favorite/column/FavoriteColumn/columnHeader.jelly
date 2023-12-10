@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
     <st:adjunct includes="hudson.plugins.favorite.assets"/>
-    <th>${%Fav}</th>
+    <th class="jenkins-table__cell--tight" tooltip="${%Favorite}">${%F}</th>
 </j:jelly>
