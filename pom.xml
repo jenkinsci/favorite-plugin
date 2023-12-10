@@ -10,7 +10,7 @@
 
   <groupId>org.jvnet.hudson.plugins</groupId>
   <artifactId>favorite</artifactId>
-  <version>${revision}${changelist}</version>
+  <version>${revision}.${changelist}</version>
   <packaging>hpi</packaging>
 
   <name>Favorite</name>
@@ -25,10 +25,10 @@
   </licenses>
 
   <properties>
-    <revision>2.4.4</revision>
-    <changelist>-SNAPSHOT</changelist>
+    <revision>2</revision>
+    <changelist>999999-SNAPSHOT</changelist>
     <!-- jenkins -->
-    <jenkins.version>2.361.4</jenkins.version>
+    <jenkins.version>2.414.3</jenkins.version>
     <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
     <!-- security spotbugs -->
     <spotbugs.failOnError>false</spotbugs.failOnError>
@@ -78,8 +78,8 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.361.x</artifactId>
-        <version>2102.v854b_fec19c92</version>
+        <artifactId>bom-2.414.x</artifactId>
+        <version>2641.v88e707466454</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -102,9 +102,3 @@
   </dependencies>
 
 </project>
-<!--
-   TODOs:
-    * Add "Auto Favorite" feature
-      * If you contribute to a build, you favorite it automatically.
-    * Clean up look and feel of user config page.
--->
