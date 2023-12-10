@@ -51,6 +51,28 @@ public class FavoriteListenerTest {
     }
 
     @Test
+    public void testToggleListener() throws IOException, FavoriteException {
+        FreeStyleProject item = rule.createFreeStyleProject("My project");
+        User user = User.get("bob");
+
+        FavoritePlugin plugin = new FavoritePlugin();
+        TestFavoriteJobListener listener = (TestFavoriteJobListener) Iterables.getFirst(Iterables.filter(FavoriteListener.all(), Predicates.instanceOf(TestFavoriteJobListener.class)), null);
+        assertNotNull(listener);
+
+        // Ensure the listener is empty
+        assertTrue(listener.addFavorites.isEmpty());
+        assertTrue(listener.removeFavorites.isEmpty());
+
+        // Toggle it on
+        Favorites.toggleFavorite(user, item);
+        assertEquals(item, listener.addFavorites.get(user));
+
+        // Toggle it off
+        Favorites.toggleFavorite(user, item);
+        assertEquals(item, listener.removeFavorites.get(user));
+    }
+
+    @Test
     public void testRenameNoFavorite() throws Exception {
         // GIVEN
         FreeStyleProject old = rule.createFreeStyleProject("Old project");
@@ -80,18 +102,21 @@ public class FavoriteListenerTest {
         FavoriteUserProperty property = user.getProperty(FavoriteUserProperty.class);
         Set<String> favorites = property.getAllFavorites();
 
+        TestFavoriteJobListener listener = (TestFavoriteJobListener) Iterables.getFirst(Iterables.filter(FavoriteListener.all(), Predicates.instanceOf(TestFavoriteJobListener.class)), null);
+
         Favorites.addFavorite(user, old);
 
-        FavoriteJobListener listener = new FavoriteJobListener();
+        FavoriteJobListener jobListener = new FavoriteJobListener();
         assertFalse("Should not contain 'New project'", favorites.contains("New project"));
         assertTrue("Should contain 'Old project'", favorites.contains("Old project"));
 
         // WHEN
-        listener.onRenamed(old, "Old project", "New project");
+        old.renameTo("New project");
 
         // THEN
         assertTrue("Should contain 'New project'", favorites.contains("New project"));
         assertFalse("Should not contain 'Old project'", favorites.contains("Old project"));
+        assertEquals(old, listener.renameFavorites.get(user));
     }
 
     @Extension
@@ -99,6 +124,8 @@ public class FavoriteListenerTest {
 
         public final Map<User, Item> addFavorites = Maps.newHashMap();
         public final Map<User, Item> removeFavorites = Maps.newHashMap();
+
+        public final Map<User, Item> renameFavorites = Maps.newHashMap();
 
         @Override
         public void onAddFavourite(Item item, User user) {
@@ -108,6 +135,11 @@ public class FavoriteListenerTest {
         @Override
         public void onRemoveFavourite(Item item, User user) {
             removeFavorites.put(user, item);
+        }
+
+        @Override
+        public void onLocationChangedFavorite(Item item, User user, String oldName, String newName) {
+            renameFavorites.put(user, item);
         }
     }
 }

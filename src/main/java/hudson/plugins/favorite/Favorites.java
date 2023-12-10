@@ -28,7 +28,13 @@ public final class Favorites {
     public static boolean toggleFavorite(@NonNull User user, @NonNull Item item) throws FavoriteException {
         try {
             FavoriteUserProperty property = getProperty(user);
-            return property.toggleFavorite(item.getFullName());
+            boolean result = property.toggleFavorite(item.getFullName());
+            if (result) {
+                FavoriteListener.fireOnAddFavourite(item, user);
+            } else {
+                FavoriteListener.fireOnRemoveFavourite(item, user);
+            }
+            return result;
         } catch (IOException e) {
             throw new FavoriteException("Could not determine Favorite state. User: <" + user.getFullName() + "> Item: <" + item.getFullName() + ">", e);
         }
