@@ -28,7 +28,7 @@ import static junit.framework.TestCase.assertNotNull;
 
 public class FavoritesPluginTest {
 
-    private static List<String> events = new CopyOnWriteArrayList<>();
+    private static final List<String> events = new CopyOnWriteArrayList<>();
     @Rule
     public JenkinsRule rule = new JenkinsRule();
 
@@ -47,9 +47,7 @@ public class FavoritesPluginTest {
         rule.createFreeStyleProject("cats");
         try (JenkinsRule.WebClient client = rule.createWebClient()) {
             WebResponse response = requestToggleFavorite(client, "cats", false);
-            // TODO should return 403 (pr to follow)
-            //assertEquals(403, response.getStatusCode());
-            assertEquals(200, response.getStatusCode());
+            assertEquals(403, response.getStatusCode());
 
             // verify favorite column not visible
             HtmlPage root = client.goTo("");
@@ -91,8 +89,7 @@ public class FavoritesPluginTest {
             assertFalse(Favorites.isFavorite(bob, cats));
         }
 
-        // TODO fix favorite listener issue (pr to follow)
-        //assertEquals(Arrays.asList("add:bob:cats", "remove:bob:cats"), events);
+        assertEquals(Arrays.asList("add:bob:cats", "remove:bob:cats"), events);
     }
 
     @Test
@@ -100,11 +97,7 @@ public class FavoritesPluginTest {
         try (JenkinsRule.WebClient client = rule.createWebClient()) {
             client.login("bob", "bob");
             WebResponse res = requestToggleFavorite(client, "foo/bar", false);
-
-            // TODO should return 404 (pr to follow)
-            //assertEquals(404, res.getStatusCode());
-            assertEquals(500, res.getStatusCode());
-
+            assertEquals(404, res.getStatusCode());
         }
 
         assertEquals(0, events.size());
