@@ -5,7 +5,7 @@
   <j:set var="sizeClass" value="${icons.toNormalizedIconSizeClass(subIconSize)}"/>
   <td data="${sortData}" class="jenkins-table__cell--tight">
     <div class="jenkins-table__cell__button-wrapper">
-      <a id="fav_${job.getFullName()}" href="#" class="jenkins-table__button favorite-toggle" data-fullName="${job.getFullName()}" data-fav="${fav}">
+      <a href="#" class="jenkins-table__button favorite-toggle" data-fullName="${job.getFullName()}" data-fav="${fav}">
         <l:icon src="symbol-star plugin-ionicons-api" class="icon-fav-active jenkins-!-color-yellow ${sizeClass} ${!fav ? 'jenkins-hidden' : ''}"/>
         <l:icon src="symbol-star-outline plugin-ionicons-api" class="icon-fav-inactive ${sizeClass} ${fav ? 'jenkins-hidden' : ''}"/>
       </a>

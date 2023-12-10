@@ -5,7 +5,7 @@
     <j:if test="${action.getUrlName() != null}">
         <div class="task">
             <span class="task-link-wrapper">
-                <a id="fav_${action.getProjectName()}" href="#" class="task-link favorite-toggle" data-fullName="${action.getProjectName()}" data-fav="${fav}">
+                <a href="#" class="task-link favorite-toggle" data-fullName="${action.getProjectName()}" data-fav="${fav}">
                     <span class="task-icon-link">
                         <l:icon src="symbol-star plugin-ionicons-api" class="icon-fav-active jenkins-!-color-yellow ${!fav ? 'jenkins-hidden' : ''}"/>
                         <l:icon src="symbol-star-outline plugin-ionicons-api" class="icon-fav-inactive ${fav ? 'jenkins-hidden' : ''}"/>
