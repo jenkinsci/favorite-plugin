@@ -3,18 +3,15 @@ package hudson.plugins.favorite.project;
 import hudson.matrix.MatrixConfiguration;
 import hudson.model.AbstractProject;
 import hudson.model.Action;
-import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.Messages;
-import jenkins.model.Jenkins;
-import org.acegisecurity.Authentication;
+import org.jenkins.ui.icon.IconSpec;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
-public class FavoriteProjectAction implements Action {
+public class FavoriteProjectAction implements Action, IconSpec {
     final private AbstractProject<?, ?> project;
 
     public FavoriteProjectAction(AbstractProject project) {
@@ -26,8 +23,15 @@ public class FavoriteProjectAction implements Action {
     }
 
     public String getIconFileName() {
+        return null;
+    }
+
+    @Override
+    public String getIconClassName() {
         if (hasPermission() && isSupportedJobType()) {
-            return isFavorite() ? "star-large-gold.svg" : "star-large.svg";
+            return isFavorite()
+                    ? "symbol-star plugin-ionicons-api"
+                    : "symbol-star-outline plugin-ionicons-api";
         }
         return null;
     }
@@ -41,25 +45,14 @@ public class FavoriteProjectAction implements Action {
 
     public String getUrlName() {
         if (hasPermission() && isSupportedJobType()) {
-            try {
-                Jenkins jenkins = Jenkins.get();
-                if (jenkins == null) {
-                    throw new IllegalStateException("Jenkins not started");
-                }
-                return "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(), "UTF-8") + "&userName=" + URLEncoder.encode(getUserName(), "UTF-8") + "&redirect=true";
-            } catch (UnsupportedEncodingException e) {
-				
-	            return null;
-			}
+            return "plugin/favorite/toggleFavorite?job=" + URLEncoder.encode(getProjectName(), StandardCharsets.UTF_8) + "&redirect=true";
         } else {
             return null;
         }
     }
 
     private boolean hasPermission() {
-        Authentication authentication = Hudson.getAuthentication();
-        String userName = authentication.getName();
-        return !userName.equals( "anonymous" );
+        return User.current() != null;
     }
     
     private boolean isSupportedJobType() {
@@ -69,28 +62,13 @@ public class FavoriteProjectAction implements Action {
         return !( project instanceof MatrixConfiguration );
     }
 
-    private String getUserName() {
-        Authentication authentication = getJenkins().getAuthentication();
-        return authentication.getName();
+    /**
+     * Check if associated project is marked as favorite.
+     * @return {@code true} if project is marked as favorite
+     */
+    public boolean isFavorite() {
+        User user = User.current();
+        return user != null && Favorites.isFavorite(user, project);
     }
 
-    private boolean isFavorite() {
-        Authentication authentication = Hudson.getAuthentication();
-        String userName = authentication.getName();
-        if (!userName.equals("anonymous")) {
-            User user = getJenkins().getUser(userName);
-            return user != null && Favorites.isFavorite(user, project);
-        }
-
-        return false;
-    }
-
-    @NonNull
-    Jenkins getJenkins() {
-        Jenkins jenkins = Jenkins.get();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins not started");
-        }
-        return jenkins;
-    }
 }
