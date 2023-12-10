@@ -3,7 +3,6 @@ package hudson.plugins.favorite.project;
 import hudson.Extension;
 import hudson.model.Action;
 import hudson.model.TopLevelItem;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import jenkins.model.TransientActionFactory;

@@ -1,14 +1,13 @@
 package hudson.plugins.favorite.user;
 
-import hudson.model.AutoCompletionCandidates;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.model.Item;
 import hudson.model.User;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
+import hudson.plugins.favorite.Messages;
 import jenkins.model.Jenkins;
 import org.apache.commons.lang.StringUtils;
-import org.kohsuke.stapler.QueryParameter;
-import hudson.plugins.favorite.Messages;
 
 public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
 
@@ -22,6 +21,7 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
     }
 
     @Override
+    @NonNull
     public String getDisplayName() {
         return Messages.favoriteUserPropertyDescriptor();
     }

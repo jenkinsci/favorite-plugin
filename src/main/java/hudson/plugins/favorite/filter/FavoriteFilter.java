@@ -1,15 +1,13 @@
 package hudson.plugins.favorite.filter;
 
-
 import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.model.View;
 import hudson.plugins.favorite.Favorites;
 import hudson.views.ViewJobFilter;
-import org.kohsuke.stapler.DataBoundConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.kohsuke.stapler.DataBoundConstructor;
 
 public class FavoriteFilter extends ViewJobFilter {
     @DataBoundConstructor
@@ -27,8 +25,6 @@ public class FavoriteFilter extends ViewJobFilter {
                 }
             }
         }
-
         return filtered;
     }
-
 }

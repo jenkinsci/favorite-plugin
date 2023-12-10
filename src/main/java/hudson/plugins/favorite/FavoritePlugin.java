@@ -4,21 +4,22 @@ import hudson.Plugin;
 import hudson.model.Item;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites.FavoriteException;
+import java.io.IOException;
+import java.util.logging.Logger;
+import javax.servlet.http.HttpServletResponse;
 import jenkins.model.Jenkins;
 import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.QueryParameter;
-import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.interceptor.RequirePOST;
-
-import java.io.IOException;
 
 @Restricted(NoExternalUse.class)
 public class FavoritePlugin extends Plugin {
 
+    private static final Logger LOGGER = Logger.getLogger(FavoritePlugin.class.getName());
     @RequirePOST
-    public void doToggleFavorite(StaplerRequest req, StaplerResponse resp, @QueryParameter String job, @QueryParameter Boolean redirect) throws IOException {
+    public void doToggleFavorite(StaplerResponse resp, @QueryParameter String job, @QueryParameter Boolean redirect) throws IOException {
         Jenkins jenkins = Jenkins.get();
         User user = User.current();
         if (user != null) {
@@ -26,31 +27,13 @@ public class FavoritePlugin extends Plugin {
                 Favorites.toggleFavorite(user, getItem(job));
             } catch (FavoriteException e) {
                 throw new IOException(e);
+            } catch (IllegalArgumentException e) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Job with name \"" + job + "\" not found.");
             }
         }
-        if(redirect) {
-            if (!job.contains("/"))
-            {
-              // Works for default URL pattern: rootUrl/job/jobName
-              resp.sendRedirect(resp.encodeRedirectURL(jenkins.getRootUrl() + "job/" + job));
-            }
-            else
-            {
-              // Works for folder URL pattern:
-              // rootUrl/job/folder/job/jobName
-              // rootUrl/job/folder/job/subfolder/job/jobName etc.
-              StringBuilder urlPostfix = new StringBuilder("job/");
-              String[] itemNames = job.split("/");
-              for (int i = 0; i < itemNames.length; i++)
-              {
-                urlPostfix.append(itemNames[i]);                  
-                if (i < itemNames.length - 1)
-                {
-                  urlPostfix.append("/job/");
-                }
-              }
-              resp.sendRedirect(resp.encodeRedirectURL(jenkins.getRootUrl() + urlPostfix.toString()));
-            }
+        if (redirect) {
+            String url = "job/" + String.join("/job/", job.split("/"));
+            resp.sendRedirect(resp.encodeRedirectURL(jenkins.getRootUrl() + url));
         }
     }
 
@@ -62,4 +45,5 @@ public class FavoritePlugin extends Plugin {
         }
         return item;
     }
+
 }

@@ -1,30 +1,28 @@
 package hudson.plugins.favorite;
 
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNotNull;
+
+import hudson.Extension;
+import hudson.model.Item;
+import hudson.model.User;
+import hudson.plugins.favorite.listener.FavoriteListener;
+import java.net.URL;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import jenkins.model.Jenkins;
 import org.htmlunit.HttpMethod;
 import org.htmlunit.WebRequest;
 import org.htmlunit.WebResponse;
 import org.htmlunit.html.DomElement;
 import org.htmlunit.html.HtmlPage;
-import hudson.Extension;
-import hudson.model.Item;
-import hudson.model.User;
-import hudson.plugins.favorite.listener.FavoriteListener;
-import jenkins.model.Jenkins;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.MockAuthorizationStrategy;
-
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertNotNull;
 
 public class FavoritesPluginTest {
 
@@ -101,10 +99,7 @@ public class FavoritesPluginTest {
             client.login("bob", "bob");
             WebResponse res = requestToggleFavorite(client, "foo/bar", false);
 
-            // TODO should return 404 (pr to follow)
-            //assertEquals(404, res.getStatusCode());
-            assertEquals(500, res.getStatusCode());
-
+            assertEquals(404, res.getStatusCode());
         }
 
         assertEquals(0, events.size());

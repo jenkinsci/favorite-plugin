@@ -9,11 +9,10 @@ import hudson.model.TaskListener;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
 import hudson.tasks.Mailer;
-import org.apache.commons.lang.StringUtils;
-import org.jenkinsci.plugins.tokenmacro.DataBoundTokenMacro;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
+import org.jenkinsci.plugins.tokenmacro.DataBoundTokenMacro;
 
 @Extension
 public class FavoriteUsersEmailTokenMacro extends DataBoundTokenMacro {

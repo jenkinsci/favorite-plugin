@@ -4,8 +4,6 @@ import hudson.ExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.Item;
 import hudson.model.User;
-import jenkins.model.Jenkins;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
