@@ -29,8 +29,8 @@ to make a favorite. You can also add another view, and apply the
 
 UI Files:
 
-  * See JS: [javascript.jelly](./src/main/resources/hudson/plugins/favorite/assets/javascript.jelly)
-  * See CSS: [css.jelly](./src/main/resources/hudson/plugins/favorite/assets/css.jelly)
+  * See JS: [assets.js](./src/main/resources/hudson/plugins/favorite/assets.js)
+  * See CSS: [assets.css](./src/main/resources/hudson/plugins/favorite/assets.css)
 
 You can subscribe to the fav-icon change event:
 
