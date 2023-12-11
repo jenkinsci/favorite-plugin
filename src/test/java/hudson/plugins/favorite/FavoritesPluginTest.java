@@ -10,6 +10,7 @@ import hudson.model.Item;
 import hudson.model.User;
 import hudson.plugins.favorite.listener.FavoriteListener;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import jenkins.model.Jenkins;
