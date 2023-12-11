@@ -5,10 +5,9 @@ import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.Messages;
-import org.jenkins.ui.icon.IconSpec;
-
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import org.jenkins.ui.icon.IconSpec;
 
 public class FavoriteProjectAction implements Action, IconSpec {
     final private TopLevelItem topLevelItem;

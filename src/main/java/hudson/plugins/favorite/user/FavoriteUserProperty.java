@@ -6,12 +6,6 @@ import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
-import jenkins.model.Jenkins;
-import net.sf.json.JSONObject;
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.export.ExportedBean;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +17,11 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import jenkins.model.Jenkins;
+import net.sf.json.JSONObject;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.export.ExportedBean;
 
 /**
  * Do not use directly.

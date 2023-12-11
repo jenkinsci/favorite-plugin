@@ -5,7 +5,6 @@ import hudson.model.Item;
 import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.model.listeners.ItemListener;
-
 import hudson.plugins.favorite.listener.FavoriteListener;
 import java.io.IOException;
 import java.util.logging.Level;

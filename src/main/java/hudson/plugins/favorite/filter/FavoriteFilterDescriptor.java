@@ -2,8 +2,8 @@ package hudson.plugins.favorite.filter;
 
 import hudson.Extension;
 import hudson.model.Descriptor;
-import hudson.views.ViewJobFilter;
 import hudson.plugins.favorite.Messages;
+import hudson.views.ViewJobFilter;
 
 @Extension
 public class FavoriteFilterDescriptor extends Descriptor<ViewJobFilter> {

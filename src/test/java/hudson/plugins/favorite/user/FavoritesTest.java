@@ -1,20 +1,19 @@
 package hudson.plugins.favorite.user;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import com.google.common.collect.ImmutableList;
 import hudson.model.Item;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.Favorites.FavoriteException;
+import java.io.IOException;
+import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
-
-import java.io.IOException;
-import java.util.List;
-
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
-import static junit.framework.TestCase.assertFalse;
 
 public class FavoritesTest {
     @Rule

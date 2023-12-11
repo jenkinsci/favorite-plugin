@@ -1,6 +1,5 @@
 package hudson.plugins.favorite;
 
-import com.google.common.collect.Iterators;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.model.Item;
 import hudson.model.User;
@@ -8,15 +7,18 @@ import hudson.plugins.favorite.listener.FavoriteListener;
 import hudson.plugins.favorite.user.FavoriteUserProperty;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
 
 /**
  * Public API for Favorites
  */
 public final class Favorites {
+
+    private static final Logger LOGGER = Logger.getLogger(Favorites.class.getName());
     /**
      * Toggles the favorite for a job
      * @param user that the favorite belongs to
@@ -123,25 +125,8 @@ public final class Favorites {
         if (favorites.isEmpty()) {
             return Collections.emptyList();
         }
-        final Iterator<String> iterator = favorites.iterator();
         final Jenkins jenkins = Jenkins.get();
-        return () -> Iterators.filter( new Iterator<Item>() {
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public Item next() {
-                return jenkins.getItemByFullName(iterator.next());
-            }
-
-            /* Fix build. */
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        }, Objects::nonNull);
+        return favorites.stream().map(jenkins::getItemByFullName).filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
     /**

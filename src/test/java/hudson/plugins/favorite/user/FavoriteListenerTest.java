@@ -1,5 +1,10 @@
 package hudson.plugins.favorite.user;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
@@ -11,18 +16,12 @@ import hudson.plugins.favorite.FavoritePlugin;
 import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.Favorites.FavoriteException;
 import hudson.plugins.favorite.listener.FavoriteListener;
-import org.junit.Rule;
-import org.junit.Test;
-import org.jvnet.hudson.test.JenkinsRule;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.Rule;
+import org.junit.Test;
+import org.jvnet.hudson.test.JenkinsRule;
 
 public class FavoriteListenerTest {
     @Rule

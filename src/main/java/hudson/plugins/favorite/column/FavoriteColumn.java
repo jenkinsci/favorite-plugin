@@ -1,5 +1,6 @@
 package hudson.plugins.favorite.column;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.model.User;
@@ -32,6 +33,8 @@ public class FavoriteColumn extends ListViewColumn {
             return new FavoriteColumn();
         }
 
+        @Override
+        @NonNull
         public String getDisplayName() {
             return Messages.favoriteColumn();
         }
