@@ -1,0 +1,21 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:f="/lib/form">
+  <l:layout title="${it.user.fullName}'s ${it.getDisplayName()}" >
+    <st:include  it="${it.user}"  page="sidepanel.jelly" />
+    <l:main-panel>
+    <h2>${it.getDisplayName()}</h2>
+    <st:adjunct includes="hudson.plugins.favorite.assets"/>
+      <div class="fup-favorite-dev">
+        <j:forEach var="favorite" items="${it.favorites}">
+          <div class="fup-favorite-row">
+            <a href="#" class="favorite-toggle fup__icon" data-fullName="${favorite}" data-fav="true">
+              <l:icon src="symbol-star plugin-ionicons-api" class="icon-fav-active icon-sm jenkins-!-color-yellow"/>
+              <l:icon src="symbol-star-outline plugin-ionicons-api" class="icon-fav-inactive icon-sm jenkins-hidden"/>
+            </a>
+            <a href="${it.descriptor.toItemUrl(favorite)}" class="jenkins-!-margin-left-1">${favorite}</a>
+          </div>
+        </j:forEach>
+      </div>
+    </l:main-panel>
+  </l:layout>
+</j:jelly>

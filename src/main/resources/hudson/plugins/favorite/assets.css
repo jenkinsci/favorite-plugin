@@ -1,3 +1,7 @@
 .fup__icon {
   vertical-align: text-bottom;
 }
+
+.fup-favorite-dev {
+  width: fit-content;
+}
