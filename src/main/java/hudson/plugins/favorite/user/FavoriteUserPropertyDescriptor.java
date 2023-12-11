@@ -20,6 +20,15 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
         return new FavoriteUserProperty();
     }
 
+    /*
+     * Intentionally set to false to hide it from the config screen.
+     * @return false
+     */
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
     @Override
     @NonNull
     public String getDisplayName() {

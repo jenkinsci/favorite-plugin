@@ -3,7 +3,9 @@ package hudson.plugins.favorite.user;
 import com.google.common.collect.Maps;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.Extension;
+import hudson.model.Action;
 import hudson.model.Descriptor;
+import hudson.model.User;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
 import java.io.IOException;
@@ -28,7 +30,7 @@ import org.kohsuke.stapler.export.ExportedBean;
  * Instead @Inject {@link hudson.plugins.favorite.Favorites}.
  */
 @ExportedBean(defaultVisibility = 999)
-public class FavoriteUserProperty extends UserProperty {
+public class FavoriteUserProperty extends UserProperty implements Action {
 
     private static final Logger LOGGER = Logger.getLogger(FavoriteUserProperty.class.getName());
 
@@ -36,7 +38,12 @@ public class FavoriteUserProperty extends UserProperty {
     public static final UserPropertyDescriptor DESCRIPTOR = new FavoriteUserPropertyDescriptor();
 
     @DataBoundConstructor
-    public FavoriteUserProperty() {}
+    public FavoriteUserProperty() {
+    }
+
+    public User getUser() {
+        return user;
+    }
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     transient List<String> favorites = new ArrayList<>();
@@ -162,4 +169,18 @@ public class FavoriteUserProperty extends UserProperty {
         }
     }
 
+    @Override
+    public String getIconFileName() {
+        return "symbol-star plugin-ionicons-api";
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Favorites";
+    }
+
+    @Override
+    public String getUrlName() {
+        return "favorites";
+    }
 }
