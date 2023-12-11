@@ -90,7 +90,7 @@ rm -rf work/*
   * In the appearing dropdown click on `Favorites`.
   * When clicking the golden star you can remove a job as favorite.
   * Preview:
-    * ![testcase-2-favorite-config](https://cloud.githubusercontent.com/assets/12599965/20640200/f0c3b806-b3d7-11e6-9fd9-43a2676b0dc8.gif)
+    * ![testcase-2-favorite-config](docs/user-favorites.gif)
 
 ## Changelog
 For recent versions, see [GitHub Releases](https://github.com/jenkinsci/favorite-plugin/releases)
