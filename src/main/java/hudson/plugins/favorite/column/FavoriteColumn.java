@@ -10,7 +10,7 @@ import hudson.views.ListViewColumn;
 import hudson.views.ListViewColumnDescriptor;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerRequest2;
 
 public class FavoriteColumn extends ListViewColumn {
 
@@ -29,7 +29,7 @@ public class FavoriteColumn extends ListViewColumn {
 
     private static class DescriptorImpl extends ListViewColumnDescriptor {
         @Override
-        public ListViewColumn newInstance(StaplerRequest req, JSONObject formData) throws FormException {
+        public ListViewColumn newInstance(StaplerRequest2 req, JSONObject formData) throws FormException {
             return new FavoriteColumn();
         }
 

@@ -11,7 +11,7 @@ import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.HttpResponses;
 import org.kohsuke.stapler.QueryParameter;
-import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.StaplerResponse2;
 import org.kohsuke.stapler.interceptor.RequirePOST;
 
 @Restricted(NoExternalUse.class)
@@ -19,7 +19,7 @@ public class FavoritePlugin extends Plugin {
 
     private static final Logger LOGGER = Logger.getLogger(FavoritePlugin.class.getName());
     @RequirePOST
-    public void doToggleFavorite(StaplerResponse resp, @QueryParameter String job, @QueryParameter Boolean redirect) throws IOException {
+    public void doToggleFavorite(StaplerResponse2 resp, @QueryParameter String job, @QueryParameter Boolean redirect) throws IOException {
         User user = User.current();
         if (user != null) {
             Jenkins jenkins = Jenkins.get();
@@ -35,7 +35,7 @@ public class FavoritePlugin extends Plugin {
             }
 
             if (redirect) {
-                resp.sendRedirect(jenkins.getRootUrl() + item.getUrl());
+                resp.sendRedirect2(jenkins.getRootUrl() + item.getUrl());
             }
         } else {
             throw HttpResponses.forbidden();
