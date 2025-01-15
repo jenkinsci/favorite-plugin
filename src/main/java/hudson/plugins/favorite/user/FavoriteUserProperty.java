@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerRequest2;
 import org.kohsuke.stapler.export.ExportedBean;
 
 /**
@@ -116,7 +116,7 @@ public class FavoriteUserProperty extends UserProperty implements Action {
     }
 
     @Override
-    public UserProperty reconfigure(StaplerRequest req, JSONObject form) throws Descriptor.FormException {
+    public UserProperty reconfigure(StaplerRequest2 req, JSONObject form) throws Descriptor.FormException {
         return this;
     }
 
