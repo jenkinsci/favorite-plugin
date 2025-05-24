@@ -5,22 +5,26 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.Extension;
 import hudson.model.Action;
 import hudson.model.Descriptor;
+import hudson.model.Item;
 import hudson.model.User;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest2;
 import org.kohsuke.stapler.export.ExportedBean;
@@ -62,7 +66,15 @@ public class FavoriteUserProperty extends UserProperty implements Action {
         return data.entrySet().stream()
                 .filter(input -> input != null && input.getValue())
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
+    }
+
+    // Jelly usage only
+    @Restricted(NoExternalUse.class)
+    public List<Item> getFavoritesSortedByDisplayName() {
+        final Jenkins jenkins = Jenkins.get();
+        return getAllFavorites().stream().map(jenkins::getItemByFullName).filter(Objects::nonNull)
+                .sorted(Comparator.comparing(Item::getFullDisplayName, String.CASE_INSENSITIVE_ORDER)).toList();
     }
 
     /**
