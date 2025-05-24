@@ -8,6 +8,8 @@ import hudson.model.UserPropertyDescriptor;
 import hudson.plugins.favorite.Messages;
 import jenkins.model.Jenkins;
 import org.apache.commons.lang.StringUtils;
+import org.kohsuke.accmod.Restricted;
+import org.kohsuke.accmod.restrictions.NoExternalUse;
 
 public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
 
@@ -36,6 +38,7 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
     }
 
     @SuppressWarnings(value = "unused") // used by jelly
+    @Deprecated(forRemoval = true)
     public String toItemUrl(String fullName) {
         if (StringUtils.isEmpty(fullName)) {
             return null;
@@ -47,6 +50,16 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
           return null;
         }
 
+        return jenkins.getRootUrl() + item.getUrl();
+    }
+
+    /*
+     * Used in Jelly only
+     */
+    @Restricted(NoExternalUse.class)
+    public String toItemUrl(Item item) {
+
+        Jenkins jenkins = Jenkins.get();
         return jenkins.getRootUrl() + item.getUrl();
     }
 
