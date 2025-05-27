@@ -11,7 +11,6 @@ import hudson.plugins.favorite.Favorites;
 import hudson.tasks.Mailer;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.tokenmacro.DataBoundTokenMacro;
 
 @Extension
@@ -32,7 +31,7 @@ public class FavoriteUsersEmailTokenMacro extends DataBoundTokenMacro {
                 users.add(mail.getAddress());
             }
         }
-        return StringUtils.join(users, ",");
+        return String.join(",", users);
     }
 
     @Override
