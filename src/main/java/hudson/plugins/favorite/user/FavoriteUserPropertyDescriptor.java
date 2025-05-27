@@ -7,7 +7,6 @@ import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
 import hudson.plugins.favorite.Messages;
 import jenkins.model.Jenkins;
-import org.apache.commons.lang.StringUtils;
 import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 
@@ -40,7 +39,7 @@ public class FavoriteUserPropertyDescriptor extends UserPropertyDescriptor {
     @SuppressWarnings(value = "unused") // used by jelly
     @Deprecated(forRemoval = true)
     public String toItemUrl(String fullName) {
-        if (StringUtils.isEmpty(fullName)) {
+        if (fullName == null || fullName.isEmpty()) {
             return null;
         }
 
