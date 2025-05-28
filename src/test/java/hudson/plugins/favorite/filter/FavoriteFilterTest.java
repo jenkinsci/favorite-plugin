@@ -13,21 +13,23 @@ import hudson.security.ACLContext;
 import java.util.ArrayList;
 import java.util.List;
 import jenkins.model.Jenkins;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.MockAuthorizationStrategy;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-public class FavoriteFilterTest {
+@WithJenkins
+class FavoriteFilterTest {
 
-    @Rule
-    public JenkinsRule rule = new JenkinsRule();
+    private JenkinsRule rule;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setUp(JenkinsRule rule) {
+        this.rule = rule;
+
         rule.jenkins.setSecurityRealm(rule.createDummySecurityRealm());
         MockAuthorizationStrategy authorizationStrategy = new MockAuthorizationStrategy();
         authorizationStrategy.grant(Jenkins.READ).onRoot().toEveryone();
@@ -36,7 +38,7 @@ public class FavoriteFilterTest {
     }
 
     @Test
-    public void filter() throws Exception {
+    void filter() throws Exception {
         TopLevelItem cats = rule.createFreeStyleProject("cats");
         TopLevelItem dogs = rule.createFreeStyleProject("dogs");
         TopLevelItem fish = rule.createFreeStyleProject("fish");
@@ -65,7 +67,7 @@ public class FavoriteFilterTest {
     }
 
     @Test
-    public void filterAnonymous() throws Exception {
+    void filterAnonymous() throws Exception {
         TopLevelItem cats = rule.createFreeStyleProject("cats");
         TopLevelItem dogs = rule.createFreeStyleProject("dogs");
         TopLevelItem fish = rule.createFreeStyleProject("fish");

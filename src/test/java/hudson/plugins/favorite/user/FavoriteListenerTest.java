@@ -1,9 +1,9 @@
 package hudson.plugins.favorite.user;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
@@ -19,18 +19,25 @@ import hudson.plugins.favorite.listener.FavoriteListener;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
-public class FavoriteListenerTest {
-    @Rule
-    public final JenkinsRule rule = new JenkinsRule();
+@WithJenkins
+class FavoriteListenerTest {
+
+    private JenkinsRule rule;
+
+    @BeforeEach
+    void setUp(JenkinsRule rule) {
+        this.rule = rule;
+    }
 
     @Test
-    public void testListener() throws IOException, FavoriteException {
+    void testListener() throws IOException, FavoriteException {
         FreeStyleProject item = rule.createFreeStyleProject("My project");
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
 
         FavoritePlugin plugin = new FavoritePlugin();
         TestFavoriteJobListener listener = (TestFavoriteJobListener) Iterables.getFirst(Iterables.filter(FavoriteListener.all(), Predicates.instanceOf(TestFavoriteJobListener.class)), null);
@@ -50,9 +57,9 @@ public class FavoriteListenerTest {
     }
 
     @Test
-    public void testToggleListener() throws IOException, FavoriteException {
+    void testToggleListener() throws IOException, FavoriteException {
         FreeStyleProject item = rule.createFreeStyleProject("My project");
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
 
         FavoritePlugin plugin = new FavoritePlugin();
         TestFavoriteJobListener listener = (TestFavoriteJobListener) Iterables.getFirst(Iterables.filter(FavoriteListener.all(), Predicates.instanceOf(TestFavoriteJobListener.class)), null);
@@ -72,31 +79,31 @@ public class FavoriteListenerTest {
     }
 
     @Test
-    public void testRenameNoFavorite() throws Exception {
+    void testRenameNoFavorite() throws Exception {
         // GIVEN
         FreeStyleProject old = rule.createFreeStyleProject("Old project");
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
 
         FavoriteUserProperty property = user.getProperty(FavoriteUserProperty.class);
         Set<String> favorites = property.getAllFavorites();
 
         FavoriteJobListener listener = new FavoriteJobListener();
-        assertFalse("Should not contain 'New project'", favorites.contains("New project"));
-        assertFalse("Should contain 'Old project'", favorites.contains("Old project"));
+        assertFalse(favorites.contains("New project"), "Should not contain 'New project'");
+        assertFalse(favorites.contains("Old project"), "Should contain 'Old project'");
 
         // WHEN
         listener.onRenamed(old, "Old project", "New project");
 
         // THEN
-        assertFalse("Should contain 'New project'", favorites.contains("New project"));
-        assertFalse("Should not contain 'Old project'", favorites.contains("Old project"));
+        assertFalse(favorites.contains("New project"), "Should contain 'New project'");
+        assertFalse(favorites.contains("Old project"), "Should not contain 'Old project'");
     }
 
     @Test
-    public void testRenameFavorite() throws Exception {
+    void testRenameFavorite() throws Exception {
         // GIVEN
         FreeStyleProject old = rule.createFreeStyleProject("Old project");
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
 
         FavoriteUserProperty property = user.getProperty(FavoriteUserProperty.class);
         Set<String> favorites = property.getAllFavorites();
@@ -106,15 +113,15 @@ public class FavoriteListenerTest {
         Favorites.addFavorite(user, old);
 
         FavoriteJobListener jobListener = new FavoriteJobListener();
-        assertFalse("Should not contain 'New project'", favorites.contains("New project"));
-        assertTrue("Should contain 'Old project'", favorites.contains("Old project"));
+        assertFalse(favorites.contains("New project"), "Should not contain 'New project'");
+        assertTrue(favorites.contains("Old project"), "Should contain 'Old project'");
 
         // WHEN
         old.renameTo("New project");
 
         // THEN
-        assertTrue("Should contain 'New project'", favorites.contains("New project"));
-        assertFalse("Should not contain 'Old project'", favorites.contains("Old project"));
+        assertTrue(favorites.contains("New project"), "Should contain 'New project'");
+        assertFalse(favorites.contains("Old project"), "Should not contain 'Old project'");
         assertEquals(old, listener.renameFavorites.get(user));
     }
 

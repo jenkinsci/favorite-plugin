@@ -1,38 +1,39 @@
 package hudson.plugins.favorite.user;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import hudson.model.FreeStyleProject;
 import hudson.model.User;
-import java.io.IOException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
-public class FavoriteUserPropertyTest {
+@WithJenkins
+class FavoriteUserPropertyTest {
 
-    @Rule
-    public JenkinsRule rule = new JenkinsRule();
+    private JenkinsRule rule;
 
-    User bob;
+    private User bob;
 
-    FavoriteUserProperty property;
+    private FavoriteUserProperty property;
 
-    @Before
-    public void createUserAndProperty() throws IOException {
-        bob = User.get("bob");
+    @BeforeEach
+    void setUp(JenkinsRule rule) throws Exception {
+        this.rule = rule;
+
+        bob = User.getById("bob", true);
         property = new FavoriteUserProperty();
         bob.addProperty(property);
     }
 
     @Test
-    public void testMigration() throws Exception {
+    void testMigration() {
         property.favorites.add("foo");
         property.favorites.add("bar");
         property.favorites.add("baz");
@@ -51,7 +52,7 @@ public class FavoriteUserPropertyTest {
     }
 
     @Test
-    public void lazyDeletionGetAllFavorites() throws Exception {
+    void lazyDeletionGetAllFavorites() throws Exception {
         rule.createFolder("f").createProject(FreeStyleProject.class, "z");
 
         rule.createFreeStyleProject("d");
@@ -67,7 +68,7 @@ public class FavoriteUserPropertyTest {
     }
 
     @Test
-    public void lazyDeletionGetFavorites() throws Exception {
+    void lazyDeletionGetFavorites() throws Exception {
         rule.createFolder("f").createProject(FreeStyleProject.class, "z");
         rule.createFreeStyleProject("d");
 

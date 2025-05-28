@@ -1,8 +1,8 @@
 package hudson.plugins.favorite.user;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.collect.ImmutableList;
 import hudson.model.Item;
@@ -11,17 +11,24 @@ import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.Favorites.FavoriteException;
 import java.io.IOException;
 import java.util.List;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
-public class FavoritesTest {
-    @Rule
-    public JenkinsRule rule = new JenkinsRule();
+@WithJenkins
+class FavoritesTest {
+
+    private JenkinsRule rule;
+
+    @BeforeEach
+    void setUp(JenkinsRule rule) {
+        this.rule = rule;
+    }
 
     @Test
-    public void testToggleFavorite() throws FavoriteException, IOException {
-        User user = User.get("bob");
+    void testToggleFavorite() throws FavoriteException, IOException {
+        User user = User.getById("bob", true);
         Item item = rule.createFreeStyleProject("bob");
 
         assertFalse(Favorites.hasFavorite(user, item));
@@ -33,17 +40,14 @@ public class FavoritesTest {
     }
 
     @Test
-    public void testAddAndRemoveFavorite() throws FavoriteException, IOException {
-        User user = User.get("bob");
+    void testAddAndRemoveFavorite() throws FavoriteException, IOException {
+        User user = User.getById("bob", true);
         Item item = rule.createFreeStyleProject("bob");
 
         assertFalse(Favorites.hasFavorite(user, item));
         assertFalse(Favorites.isFavorite(user, item));
 
-        try {
-            Favorites.removeFavorite(user, item);
-            fail("Exception not thrown");
-        } catch (FavoriteException e) {}
+        assertThrows(FavoriteException.class, () -> Favorites.removeFavorite(user, item));
 
         assertFalse(Favorites.hasFavorite(user, item));
         assertFalse(Favorites.isFavorite(user, item));
@@ -52,10 +56,7 @@ public class FavoritesTest {
         assertTrue(Favorites.hasFavorite(user, item));
         assertTrue(Favorites.isFavorite(user, item));
 
-        try {
-            Favorites.addFavorite(user, item);
-            fail("Exception not thrown");
-        } catch (FavoriteException e) {}
+        assertThrows(FavoriteException.class, () -> Favorites.addFavorite(user, item));
 
         Favorites.removeFavorite(user, item);
         assertTrue(Favorites.hasFavorite(user, item));
@@ -63,8 +64,8 @@ public class FavoritesTest {
     }
 
     @Test
-    public void testGetFavorites() throws Exception {
-        User user = User.get("bob");
+    void testGetFavorites() throws Exception {
+        User user = User.getById("bob", true);
         Item project1 = rule.createFreeStyleProject("project1");
         assertFalse(Favorites.hasFavorite(user, project1));
         assertFalse(Favorites.isFavorite(user, project1));
