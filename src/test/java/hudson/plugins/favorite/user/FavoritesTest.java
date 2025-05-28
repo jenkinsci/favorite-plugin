@@ -1,8 +1,8 @@
 package hudson.plugins.favorite.user;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import com.google.common.collect.ImmutableList;
 import hudson.model.Item;
@@ -28,7 +28,7 @@ class FavoritesTest {
 
     @Test
     void testToggleFavorite() throws FavoriteException, IOException {
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
         Item item = rule.createFreeStyleProject("bob");
 
         assertFalse(Favorites.hasFavorite(user, item));
@@ -41,16 +41,13 @@ class FavoritesTest {
 
     @Test
     void testAddAndRemoveFavorite() throws FavoriteException, IOException {
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
         Item item = rule.createFreeStyleProject("bob");
 
         assertFalse(Favorites.hasFavorite(user, item));
         assertFalse(Favorites.isFavorite(user, item));
 
-        try {
-            Favorites.removeFavorite(user, item);
-            fail("Exception not thrown");
-        } catch (FavoriteException e) {}
+        assertThrows(FavoriteException.class, () -> Favorites.removeFavorite(user, item));
 
         assertFalse(Favorites.hasFavorite(user, item));
         assertFalse(Favorites.isFavorite(user, item));
@@ -59,10 +56,7 @@ class FavoritesTest {
         assertTrue(Favorites.hasFavorite(user, item));
         assertTrue(Favorites.isFavorite(user, item));
 
-        try {
-            Favorites.addFavorite(user, item);
-            fail("Exception not thrown");
-        } catch (FavoriteException e) {}
+        assertThrows(FavoriteException.class, () -> Favorites.addFavorite(user, item));
 
         Favorites.removeFavorite(user, item);
         assertTrue(Favorites.hasFavorite(user, item));
@@ -71,7 +65,7 @@ class FavoritesTest {
 
     @Test
     void testGetFavorites() throws Exception {
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
         Item project1 = rule.createFreeStyleProject("project1");
         assertFalse(Favorites.hasFavorite(user, project1));
         assertFalse(Favorites.isFavorite(user, project1));

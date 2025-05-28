@@ -27,13 +27,13 @@ class FavoriteUserPropertyTest {
     void setUp(JenkinsRule rule) throws Exception {
         this.rule = rule;
 
-        bob = User.get("bob");
+        bob = User.getById("bob", true);
         property = new FavoriteUserProperty();
         bob.addProperty(property);
     }
 
     @Test
-    void testMigration() throws Exception {
+    void testMigration() {
         property.favorites.add("foo");
         property.favorites.add("bar");
         property.favorites.add("baz");

@@ -19,7 +19,6 @@ import org.htmlunit.WebRequest;
 import org.htmlunit.WebResponse;
 import org.htmlunit.html.DomElement;
 import org.htmlunit.html.HtmlPage;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
@@ -82,7 +81,7 @@ class FavoritesPluginTest {
 
             // verify table view
             HtmlPage root = client.goTo("");
-            assertTrue(root.querySelectorAll("svg.icon-fav-active").size() > 0);
+            assertFalse(root.querySelectorAll("svg.icon-fav-active").isEmpty());
             assertFavoriteColumStatus(root, "cats", true);
             assertFavoriteColumStatus(root, "dogs", false);
 

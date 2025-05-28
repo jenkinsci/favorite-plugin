@@ -37,7 +37,7 @@ class FavoriteListenerTest {
     @Test
     void testListener() throws IOException, FavoriteException {
         FreeStyleProject item = rule.createFreeStyleProject("My project");
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
 
         FavoritePlugin plugin = new FavoritePlugin();
         TestFavoriteJobListener listener = (TestFavoriteJobListener) Iterables.getFirst(Iterables.filter(FavoriteListener.all(), Predicates.instanceOf(TestFavoriteJobListener.class)), null);
@@ -59,7 +59,7 @@ class FavoriteListenerTest {
     @Test
     void testToggleListener() throws IOException, FavoriteException {
         FreeStyleProject item = rule.createFreeStyleProject("My project");
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
 
         FavoritePlugin plugin = new FavoritePlugin();
         TestFavoriteJobListener listener = (TestFavoriteJobListener) Iterables.getFirst(Iterables.filter(FavoriteListener.all(), Predicates.instanceOf(TestFavoriteJobListener.class)), null);
@@ -82,7 +82,7 @@ class FavoriteListenerTest {
     void testRenameNoFavorite() throws Exception {
         // GIVEN
         FreeStyleProject old = rule.createFreeStyleProject("Old project");
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
 
         FavoriteUserProperty property = user.getProperty(FavoriteUserProperty.class);
         Set<String> favorites = property.getAllFavorites();
@@ -103,7 +103,7 @@ class FavoriteListenerTest {
     void testRenameFavorite() throws Exception {
         // GIVEN
         FreeStyleProject old = rule.createFreeStyleProject("Old project");
-        User user = User.get("bob");
+        User user = User.getById("bob", true);
 
         FavoriteUserProperty property = user.getProperty(FavoriteUserProperty.class);
         Set<String> favorites = property.getAllFavorites();
