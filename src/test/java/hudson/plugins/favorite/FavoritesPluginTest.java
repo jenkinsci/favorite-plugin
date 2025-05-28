@@ -1,9 +1,9 @@
 package hudson.plugins.favorite;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import hudson.Extension;
 import hudson.model.Item;
@@ -19,20 +19,24 @@ import org.htmlunit.WebRequest;
 import org.htmlunit.WebResponse;
 import org.htmlunit.html.DomElement;
 import org.htmlunit.html.HtmlPage;
-import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.MockAuthorizationStrategy;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
-public class FavoritesPluginTest {
+@WithJenkins
+class FavoritesPluginTest {
 
     private static final List<String> events = new CopyOnWriteArrayList<>();
-    @Rule
-    public JenkinsRule rule = new JenkinsRule();
 
-    @Before
-    public void setup() {
+    private JenkinsRule rule;
+
+    @BeforeEach
+    void setUp(JenkinsRule rule) {
+        this.rule = rule;
+
         events.clear();
         rule.jenkins.setSecurityRealm(rule.createDummySecurityRealm());
         MockAuthorizationStrategy authorizationStrategy = new MockAuthorizationStrategy();
@@ -42,7 +46,7 @@ public class FavoritesPluginTest {
     }
 
     @Test
-    public void testToggleFavoriteAnonymous() throws Exception {
+    void testToggleFavoriteAnonymous() throws Exception {
         rule.createFreeStyleProject("cats");
         try (JenkinsRule.WebClient client = rule.createWebClient()) {
             WebResponse response = requestToggleFavorite(client, "cats", false);
@@ -60,7 +64,7 @@ public class FavoritesPluginTest {
     }
 
     @Test
-    public void testToggleFavorite() throws Exception {
+    void testToggleFavorite() throws Exception {
         rule.createFreeStyleProject("dogs");
         Item cats = rule.createFreeStyleProject("cats");
         User bob = User.getById("bob", true);
@@ -92,7 +96,7 @@ public class FavoritesPluginTest {
     }
 
     @Test
-    public void testToggleFavoriteJobDoesNotExist() throws Exception {
+    void testToggleFavoriteJobDoesNotExist() throws Exception {
         try (JenkinsRule.WebClient client = rule.createWebClient()) {
             client.login("bob", "bob");
             WebResponse res = requestToggleFavorite(client, "foo/bar", false);
@@ -103,7 +107,7 @@ public class FavoritesPluginTest {
     }
 
     @Test
-    public void testToggleFavoriteRedirect() throws Exception {
+    void testToggleFavoriteRedirect() throws Exception {
         rule.createFreeStyleProject("cats");
         try (JenkinsRule.WebClient client = rule.createWebClient()) {
             client.login("bob");
