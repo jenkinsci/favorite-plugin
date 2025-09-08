@@ -28,6 +28,7 @@ import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest2;
 import org.kohsuke.stapler.export.ExportedBean;
+import org.springframework.security.access.AccessDeniedException;
 
 /**
  * Do not use directly.
@@ -171,7 +172,18 @@ public class FavoriteUserProperty extends UserProperty implements Action {
     private void removeFavoritesWhichDoNotExist() {
         Jenkins jenkins = Jenkins.get();
         for (String fullName : Collections.unmodifiableSet(data.keySet())) {
-            if (jenkins.getItemByFullName(fullName) == null) {
+            try {
+                if (jenkins.getItemByFullName(fullName) == null) {
+                    try {
+                        deleteFavourite(fullName);
+                    } catch (IOException e) {
+                        LOGGER.log(Level.SEVERE, "Could not purge favorite '" + fullName + "'", e);
+                    }
+                }
+            } catch (AccessDeniedException ade) {
+                // user has probably only discover permission, but not read permission
+                // we cannot check if the job still exists, so delete from favorites
+                LOGGER.log(Level.FINE, "Cannot check existence of favorite '" + fullName + "'", ade);
                 try {
                     deleteFavourite(fullName);
                 } catch (IOException e) {
