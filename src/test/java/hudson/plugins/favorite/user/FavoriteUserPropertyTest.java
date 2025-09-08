@@ -1,5 +1,7 @@
 package hudson.plugins.favorite.user;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,10 +10,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import hudson.model.FreeStyleProject;
+import hudson.model.Item;
 import hudson.model.User;
+import hudson.security.ACL;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.jvnet.hudson.test.Issue;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.MockAuthorizationStrategy;
 import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
 @WithJenkins
@@ -80,5 +86,26 @@ class FavoriteUserPropertyTest {
 
         // a,b,c do not exist and should be removed
         assertEquals(ImmutableSet.of("d", "f/z"), ImmutableSet.copyOf(property.getFavorites()));
+    }
+
+    @Issue("JENKINS-76073")
+    @Test
+    void discoverOnlyPermissions() throws Exception {
+        FreeStyleProject read = rule.createFreeStyleProject("read");
+        FreeStyleProject discover = rule.createFreeStyleProject("discover");
+        property.addFavorite("p");
+        rule.jenkins.setSecurityRealm(rule.createDummySecurityRealm());
+        MockAuthorizationStrategy authorizationStrategy = new MockAuthorizationStrategy();
+        authorizationStrategy.grant(Item.DISCOVER).onItems(discover).to("bob");
+        authorizationStrategy.grant(Item.READ).onItems(read).to("bob");
+        rule.jenkins.setAuthorizationStrategy(authorizationStrategy);
+
+        try (var context = ACL.as(bob)) {
+            property.addFavorite("discover");
+            property.addFavorite("read");
+            assertThat(property.isJobFavorite("discover"), is(true));
+            assertThat(property.isJobFavorite("read"), is(true));
+            assertEquals(ImmutableSet.of("read"), ImmutableSet.copyOf(property.getAllFavorites()));
+        }
     }
 }
