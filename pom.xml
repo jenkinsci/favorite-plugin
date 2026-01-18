@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>5.28</version>
+    <version>6.2116.v7501b_67dc517</version>
   </parent>
 
   <groupId>org.jvnet.hudson.plugins</groupId>
@@ -28,7 +28,7 @@
     <revision>2</revision>
     <changelist>999999-SNAPSHOT</changelist>
     <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
-    <jenkins.baseline>2.479</jenkins.baseline>
+    <jenkins.baseline>2.516</jenkins.baseline>
     <jenkins.version>${jenkins.baseline}.3</jenkins.version>
     <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
     <!-- security spotbugs -->
@@ -36,25 +36,9 @@
     <spotbugs.effort>Max</spotbugs.effort>
     <spotbugs.threshold>Low</spotbugs.threshold>
     <ban-junit4-imports.skip>false</ban-junit4-imports.skip>
+    <ban-commons-lang-2.skip>false</ban-commons-lang-2.skip>
+    <hpi.strictBundledArtifacts>true</hpi.strictBundledArtifacts>
   </properties>
-
-  <developers>
-    <developer>
-      <id>lshatzer</id>
-      <name>Larry Shatzer, Jr.</name>
-      <email>larrys@gmail.com</email>
-    </developer>
-    <developer>
-      <id>jamesdumay</id>
-      <name>James Dumay</name>
-      <email>jdumay@cloudbees.com</email>
-    </developer>
-    <developer>
-      <id>michaelneale</id>
-      <name>Michael Neale</name>
-      <email>mneale@cloudbees.com</email>
-    </developer>
-  </developers>
 
   <scm>
     <connection>scm:git:https://github.com/${gitHubRepo}.git</connection>
@@ -81,7 +65,7 @@
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
         <artifactId>bom-${jenkins.baseline}.x</artifactId>
-        <version>5054.v620b_5d2b_d5e6</version>
+        <version>5933.vcf06f7b_5d1a_2</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
