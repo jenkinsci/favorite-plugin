@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>6.2116.v7501b_67dc517</version>
+    <version>6.2152.ve00a_731c3ce9</version>
   </parent>
 
   <groupId>org.jvnet.hudson.plugins</groupId>
@@ -28,8 +28,8 @@
     <revision>2</revision>
     <changelist>999999-SNAPSHOT</changelist>
     <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
-    <jenkins.baseline>2.516</jenkins.baseline>
-    <jenkins.version>${jenkins.baseline}.3</jenkins.version>
+    <jenkins.baseline>2.555</jenkins.baseline>
+    <jenkins.version>2.556</jenkins.version>
     <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
     <!-- security spotbugs -->
     <spotbugs.failOnError>false</spotbugs.failOnError>
@@ -37,7 +37,9 @@
     <spotbugs.threshold>Low</spotbugs.threshold>
     <ban-junit4-imports.skip>false</ban-junit4-imports.skip>
     <ban-commons-lang-2.skip>false</ban-commons-lang-2.skip>
+    <ban-deprecated-stapler.skip>false</ban-deprecated-stapler.skip>
     <hpi.strictBundledArtifacts>true</hpi.strictBundledArtifacts>
+    <useBeta>true</useBeta>
   </properties>
 
   <scm>
@@ -65,7 +67,7 @@
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
         <artifactId>bom-${jenkins.baseline}.x</artifactId>
-        <version>5933.vcf06f7b_5d1a_2</version>
+        <version>6329.v403d8c87a_5ce</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>

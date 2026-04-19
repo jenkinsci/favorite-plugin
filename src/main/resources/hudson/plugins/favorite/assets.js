@@ -1,4 +1,4 @@
-Behaviour.specify("A.favorite-toggle", "favorite.toggle", 0, (a) => {
+Behaviour.specify("A.favorite-toggle, button[data-favorite-toggle]", "favorite.toggle", 0, (a) => {
   a.onclick = (event) => {
     event.preventDefault();
     const job = a.getAttribute("data-fullName");
