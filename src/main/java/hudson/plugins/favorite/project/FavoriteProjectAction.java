@@ -5,9 +5,15 @@ import hudson.model.TopLevelItem;
 import hudson.model.User;
 import hudson.plugins.favorite.Favorites;
 import hudson.plugins.favorite.Messages;
+import jenkins.model.Jenkins;
+import jenkins.model.menu.Group;
+import jenkins.model.menu.event.Event;
+import jenkins.model.menu.event.JavaScriptEvent;
+import org.jenkins.ui.icon.IconSpec;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import org.jenkins.ui.icon.IconSpec;
+import java.util.Map;
 
 public class FavoriteProjectAction implements Action, IconSpec {
     final private TopLevelItem topLevelItem;
@@ -60,6 +66,17 @@ public class FavoriteProjectAction implements Action, IconSpec {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Group getGroup() {
+        return Group.IN_MENU;
+    }
+
+    @Override
+    public Event getEvent() {
+        return JavaScriptEvent.of(Map.of("favorite-toggle", "", "full-name", getItemName(), "fav", Boolean.toString(isFavorite())),
+                "adjuncts/" + Jenkins.SESSION_HASH + "/hudson/plugins/favorite/assets.js");
     }
 
     private boolean hasPermission() {
