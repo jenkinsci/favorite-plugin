@@ -70,7 +70,7 @@ public class FavoriteProjectAction implements Action, IconSpec {
 
     @Override
     public Group getGroup() {
-        return Group.IN_MENU;
+        return Group.FIRST_IN_MENU;
     }
 
     @Override
